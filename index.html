@@ -1,1 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brewtopia Franchise - Brew Your Success Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --coffee-dark: #2C1810;
+            --coffee-medium: #4A2C17;
+            --coffee-light: #8B4513;
+            --cream: #F5F1EB;
+            --gold: #D4A574;
+            --amber: #F59E0B;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #F0EBE3 100%);
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+            to { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8); }
+        }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--amber) 0%, var(--gold) 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        .coffee-bean {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--coffee-medium);
+            border-radius: 50%;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .steam {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .steam::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(255,255,255,0.3), transparent);
+            animation: steam-rise 2s linear infinite;
+        }
+
+        @keyframes steam-rise {
+            0% { transform: translateX(-50%) translateY(100%); }
+            100% { transform: translateX(-50%) translateY(-100%); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 leading-relaxed">
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Floating coffee beans -->
+    <div class="fixed inset-0 pointer-events-none z-0" id="coffeeBeans"></div>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+        <div class="glass-morphism">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl steam">☕</div>
+                        <h1 class="text-3xl font-display font-bold gradient-text">Brewtopia</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#our-story" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                            Our Story
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#about" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                            About
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#gallery" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                            Gallery
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#process" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                            Process
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#contact" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold shadow-lg pulse-glow">
+                            Get Started
+                        </a>
+                    </nav>
+                    <button class="md:hidden text-gray-700" id="mobileMenuBtn">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F59E0B" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+            
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center max-w-5xl mx-auto">
+                    <div class="floating mb-8">
+                        <div class="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-4xl shadow-2xl">
+                            ☕
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-6xl md:text-8xl font-display font-bold mb-6 gradient-text leading-tight">
+                        Brew Your
+                        <span class="block">Success Story</span>
+                    </h2>
+                    
+                    <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+                        Join the Brewtopia family and own a thriving business in the heart of your community with a brand built on 
+                        <span class="text-amber-600 font-semibold">quality</span> and 
+                        <span class="text-amber-600 font-semibold">passion</span>.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                        <a href="#contact" class="group px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-3xl pulse-glow">
+                            <span class="mr-2">Become a Partner</span>
+                            <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+                        </a>
+                        <a href="#our-story" class="px-10 py-4 border-2 border-amber-500 text-amber-600 font-bold text-lg rounded-full hover:bg-amber-500 hover:text-white transition-all duration-300 transform hover:scale-105">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <div class="w-6 h-10 border-2 border-amber-500 rounded-full flex justify-center">
+                    <div class="w-1 h-3 bg-amber-500 rounded-full mt-2 animate-bounce"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section id="our-story" class="py-32 px-6 bg-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-amber-50 to-transparent opacity-50"></div>
+            
+            <div class="container mx-auto max-w-7xl relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 rounded-3xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300"></div>
+                        <img src="https://placehold.co/800x600/8B4513/FFF?text=Our+Master+Roasters" alt="Our story image" class="relative rounded-3xl shadow-2xl w-full hover-lift">
+                        <div class="absolute -bottom-6 -right-6 w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl">
+                            <span class="text-3xl">🏆</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold">
+                            Our Journey
+                        </div>
+                        
+                        <h3 class="text-5xl md:text-6xl font-display font-bold text-gray-900 leading-tight">
+                            Crafting <span class="gradient-text">Excellence</span>
+                            <br>Since Day One
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <p class="text-xl text-gray-600 leading-relaxed">
+                                Brewtopia began with a simple yet powerful idea: to create community hubs where exceptional coffee meets genuine human connection. Our journey started in a cozy corner café, fueled by an unwavering passion for the perfect roast.
+                            </p>
+                            
+                            <p class="text-xl text-gray-600 leading-relaxed">
+                                Today, we've grown into a thriving franchise family, but our mission remains unchanged: delivering authentic, premium coffee experiences while fostering a supportive network of partners who share our values.
+                            </p>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-6 pt-8">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-amber-600">150+</div>
+                                <div class="text-sm text-gray-500">Locations</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-amber-600">98%</div>
+                                <div class="text-sm text-gray-500">Success Rate</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-amber-600">15+</div>
+                                <div class="text-sm text-gray-500">Years Strong</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-32 px-6 bg-gradient-to-br from-gray-50 to-amber-50 relative">
+            <div class="container mx-auto max-w-7xl">
+                <div class="text-center mb-20">
+                    <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                        Why Choose Us
+                    </div>
+                    
+                    <h3 class="text-5xl md:text-6xl font-display font-bold text-gray-900 mb-6 leading-tight">
+                        A <span class="gradient-text">Proven Model</span>
+                        <br>for Success
+                    </h3>
+                    
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        Our passion for coffee is matched only by our commitment to our franchise partners. We provide everything you need to start and grow a successful business.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="group relative">
+                        <div class="p-10 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover-lift border border-amber-100">
+                            <div class="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">☕️</div>
+                            <h4 class="text-2xl font-display font-bold mb-4 text-gray-900">Exceptional Quality</h4>
+                            <p class="text-gray-600 leading-relaxed">Our beans are ethically sourced from premium farms and expertly roasted to ensure a consistently delightful cup every time.</p>
+                            
+                            <div class="mt-6 pt-6 border-t border-amber-100">
+                                <div class="flex items-center text-amber-600 font-semibold">
+                                    <span>Learn more</span>
+                                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative">
+                        <div class="p-10 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover-lift border border-amber-100">
+                            <div class="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">🤝</div>
+                            <h4 class="text-2xl font-display font-bold mb-4 text-gray-900">Comprehensive Support</h4>
+                            <p class="text-gray-600 leading-relaxed">From initial setup and training to ongoing marketing and operations, we're with you every step of the way to ensure your success.</p>
+                            
+                            <div class="mt-6 pt-6 border-t border-amber-100">
+                                <div class="flex items-center text-amber-600 font-semibold">
+                                    <span>Learn more</span>
+                                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative">
+                        <div class="p-10 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover-lift border border-amber-100">
+                            <div class="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">📈</div>
+                            <h4 class="text-2xl font-display font-bold mb-4 text-gray-900">Strong Returns</h4>
+                            <p class="text-gray-600 leading-relaxed">Benefit from our established brand, loyal customer base, and a proven business model designed for strong financial returns.</p>
+                            
+                            <div class="mt-6 pt-6 border-t border-amber-100">
+                                <div class="flex items-center text-amber-600 font-semibold">
+                                    <span>Learn more</span>
+                                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-32 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23F59E0B" fill-opacity="0.1"%3E%3Cpath d="m0 40l40-40h-40v40zm40 0v-40h-40l40 40z"/%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+            
+            <div class="container mx-auto max-w-7xl relative z-10">
+                <div class="text-center mb-20">
+                    <div class="inline-block px-4 py-2 bg-amber-500/20 text-amber-300 rounded-full text-sm font-semibold mb-6">
+                        Experience the Atmosphere
+                    </div>
+                    
+                    <h3 class="text-5xl md:text-6xl font-display font-bold mb-6 leading-tight">
+                        Inside Our <span class="text-amber-400">Cozy</span> Stores
+                    </h3>
+                    
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        Discover the warm, inviting atmosphere that makes our cafés the favorite gathering place in communities across the country.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="group relative overflow-hidden rounded-3xl">
+                        <img src="https://placehold.co/800x600/4A2C17/FFF?text=Rustic+Interior" alt="Store interior" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-6 left-6">
+                                <h4 class="text-white font-bold text-xl">Rustic Charm</h4>
+                                <p class="text-gray-300">Warm, welcoming interiors</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative overflow-hidden rounded-3xl">
+                        <img src="https://placehold.co/800x600/6B4423/FFF?text=Coffee+Bar" alt="Coffee bar" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-6 left-6">
+                                <h4 class="text-white font-bold text-xl">Expert Baristas</h4>
+                                <p class="text-gray-300">Crafting perfect cups</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative overflow-hidden rounded-3xl">
+                        <img src="https://placehold.co/800x600/8B4513/FFF?text=Community+Space" alt="Community space" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-6 left-6">
+                                <h4 class="text-white font-bold text-xl">Community Hub</h4>
+                                <p class="text-gray-300">Where connections happen</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative overflow-hidden rounded-3xl">
+                        <img src="https://placehold.co/800x600/4A2C17/FFF?text=Fresh+Pastries" alt="Pastries" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-6 left-6">
+                                <h4 class="text-white font-bold text-xl">Fresh Treats</h4>
+                                <p class="text-gray-300">Baked daily with love</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative overflow-hidden rounded-3xl">
+                        <img src="https://placehold.co/800x600/6B4423/FFF?text=Cozy+Seating" alt="Seating area" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-6 left-6">
+                                <h4 class="text-white font-bold text-xl">Comfortable Seating</h4>
+                                <p class="text-gray-300">Perfect for any occasion</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="group relative overflow-hidden rounded-3xl">
+                        <img src="https://placehold.co/800x600/8B4513/FFF?text=Latte+Art" alt="Latte art" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-6 left-6">
+                                <h4 class="text-white font-bold text-xl">Artisanal Coffee</h4>
+                                <p class="text-gray-300">Every cup is a masterpiece</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section id="process" class="py-32 px-6 bg-white relative overflow-hidden">
+            <div class="container mx-auto max-w-7xl">
+                <div class="text-center mb-20">
+                    <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                        Your Journey Starts Here
+                    </div>
+                    
+                    <h3 class="text-5xl md:text-6xl font-display font-bold text-gray-900 mb-6 leading-tight">
+                        Simple <span class="gradient-text">4-Step</span> Process
+                    </h3>
+                    
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        Becoming a Brewtopia franchise partner is straightforward. Here's how we'll work together to build your success story.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="relative group text-center">
+                        <div class="relative">
+                            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                                3
+                            </div>
+                            <div class="absolute top-12 -right-4 w-8 h-0.5 bg-amber-300 hidden lg:block"></div>
+                        </div>
+                        
+                        <h4 class="text-2xl font-display font-bold mb-4 text-gray-900">Training & Setup</h4>
+                        <p class="text-gray-600 leading-relaxed">Receive comprehensive training and hands-on support for site selection, store design, and operations management.</p>
+                    </div>
+                    
+                    <div class="relative group text-center">
+                        <div class="relative">
+                            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                                4
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-2xl font-display font-bold mb-4 text-gray-900">Grand Opening</h4>
+                        <p class="text-gray-600 leading-relaxed">Launch your business with our full support, from marketing campaigns to on-site assistance on your exciting opening day.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shop Section -->
+        <section id="shop" class="py-32 px-6 bg-gradient-to-br from-amber-50 to-orange-50 text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23F59E0B" fill-opacity="0.1"%3E%3Cpath d="M0 0h20v20H0z"/%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+            
+            <div class="container mx-auto max-w-5xl relative z-10">
+                <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                    Take Brewtopia Home
+                </div>
+                
+                <h3 class="text-5xl md:text-6xl font-display font-bold text-gray-900 mb-6 leading-tight">
+                    Shop Our <span class="gradient-text">Signature</span> Blends
+                </h3>
+                
+                <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+                    Experience the quality of Brewtopia at home. Explore our collection of premium roasts, professional brewing equipment, and exclusive merchandise.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="group p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+                        <div class="text-4xl mb-4">☕</div>
+                        <h4 class="font-bold text-lg mb-2">Premium Coffee</h4>
+                        <p class="text-gray-600 text-sm">Single-origin & signature blends</p>
+                    </div>
+                    <div class="group p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+                        <div class="text-4xl mb-4">🛠️</div>
+                        <h4 class="font-bold text-lg mb-2">Brewing Equipment</h4>
+                        <p class="text-gray-600 text-sm">Professional-grade tools</p>
+                    </div>
+                    <div class="group p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover-lift">
+                        <div class="text-4xl mb-4">👕</div>
+                        <h4 class="font-bold text-lg mb-2">Merchandise</h4>
+                        <p class="text-gray-600 text-sm">Branded apparel & accessories</p>
+                    </div>
+                </div>
+                
+                <a href="#" class="group inline-flex items-center px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105">
+                    <span class="mr-2">Shop Now</span>
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-32 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F59E0B" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+            
+            <div class="container mx-auto max-w-5xl text-center relative z-10">
+                <div class="inline-block px-4 py-2 bg-amber-500/20 text-amber-300 rounded-full text-sm font-semibold mb-6">
+                    Ready to Get Started?
+                </div>
+                
+                <h3 class="text-5xl md:text-6xl font-display font-bold mb-6 leading-tight">
+                    Let's Start <span class="text-amber-400">Brewing</span> Together
+                </h3>
+                
+                <p class="text-xl text-gray-300 mb-16 max-w-3xl mx-auto leading-relaxed">
+                    Fill out the form below and a member of our dedicated franchise development team will contact you shortly to begin your journey.
+                </p>
+                
+                <div class="max-w-2xl mx-auto">
+                    <form class="space-y-6 text-left bg-white/10 glass-morphism p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="firstName" class="block text-lg font-medium mb-2 text-white">First Name</label>
+                                <input type="text" id="firstName" name="firstName" class="w-full px-5 py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-white placeholder-gray-300 transition-all duration-300" placeholder="John" required>
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-lg font-medium mb-2 text-white">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" class="w-full px-5 py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-white placeholder-gray-300 transition-all duration-300" placeholder="Doe" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-lg font-medium mb-2 text-white">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full px-5 py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-white placeholder-gray-300 transition-all duration-300" placeholder="john@example.com" required>
+                        </div>
+                        
+                        <div>
+                            <label for="phone" class="block text-lg font-medium mb-2 text-white">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="w-full px-5 py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-white placeholder-gray-300 transition-all duration-300" placeholder="(555) 123-4567">
+                        </div>
+                        
+                        <div>
+                            <label for="investment" class="block text-lg font-medium mb-2 text-white">Investment Range</label>
+                            <select id="investment" name="investment" class="w-full px-5 py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-white transition-all duration-300" required>
+                                <option value="" class="text-gray-900">Select your investment range</option>
+                                <option value="100-250k" class="text-gray-900">$100k - $250k</option>
+                                <option value="250-500k" class="text-gray-900">$250k - $500k</option>
+                                <option value="500k+" class="text-gray-900">$500k+</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-lg font-medium mb-2 text-white">Tell Us About Yourself</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-5 py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-white placeholder-gray-300 transition-all duration-300 resize-none" placeholder="Share your background, experience, and what excites you about joining the Brewtopia family..." required></textarea>
+                        </div>
+                        
+                        <div class="text-center pt-4">
+                            <button type="submit" class="group w-full md:w-auto px-12 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 pulse-glow">
+                                <span class="mr-2">Submit Application</span>
+                                <svg class="w-5 h-5 inline-block group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div class="flex items-center justify-center space-x-3">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center">📧</div>
+                            <div>
+                                <div class="font-semibold">Email</div>
+                                <div class="text-sm text-gray-300">franchise@brewtopia.com</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center">📱</div>
+                            <div>
+                                <div class="font-semibold">Phone</div>
+                                <div class="text-sm text-gray-300">1-800-BREWTOPIA</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3">
+                            <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center">⏰</div>
+                            <div>
+                                <div class="font-semibold">Hours</div>
+                                <div class="text-sm text-gray-300">Mon-Fri 9AM-6PM EST</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">☕</div>
+                        <h4 class="text-2xl font-display font-bold text-white">Brewtopia</h4>
+                    </div>
+                    <p class="text-gray-400 mb-6 max-w-md">Building communities one cup at a time. Join our franchise family and brew your success story.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors">📘</a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors">📸</a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors">🐦</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h5 class="text-white font-semibold mb-4">Quick Links</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#our-story" class="hover:text-amber-400 transition-colors">Our Story</a></li>
+                        <li><a href="#about" class="hover:text-amber-400 transition-colors">About</a></li>
+                        <li><a href="#process" class="hover:text-amber-400 transition-colors">Process</a></li>
+                        <li><a href="#contact" class="hover:text-amber-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="text-white font-semibold mb-4">Support</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Training</a></li>
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Marketing</a></li>
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Resources</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+                <p>&copy; 2024 Brewtopia Franchise. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Progress bar
+        function updateProgressBar() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        }
+        
+        window.addEventListener('scroll', updateProgressBar);
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.1)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            }
+        });
+
+        // Floating coffee beans animation
+        function createCoffeeBean() {
+            const bean = document.createElement('div');
+            bean.className = 'coffee-bean';
+            bean.style.left = Math.random() * 100 + 'vw';
+            bean.style.animationDelay = Math.random() * 2 + 's';
+            bean.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.getElementById('coffeeBeans').appendChild(bean);
+
+            setTimeout(() => {
+                bean.remove();
+            }, 5000);
+        }
+
+        // Create coffee beans periodically
+        setInterval(createCoffeeBean, 3000);
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.querySelector('nav');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                nav.classList.toggle('hidden');
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for scroll animations
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.6s ease-out';
+            observer.observe(section);
+        });
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show success message
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span class="mr-2">Submitted!</span> ✓';
+            button.style.background = 'linear-gradient(to right, #10B981, #059669)';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+                this.reset();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
