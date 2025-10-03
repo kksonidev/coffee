@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Gallery - Brewtopia Franchise</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+   <style>
+       :root {
+           --coffee-dark: #2C1810;
+           --coffee-medium: #4A2C17;
+           --coffee-light: #8B4513;
+           --cream: #F5F1EB;
+           --gold: #D4A574;
+           --amber: #F59E0B;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+       body {
+           font-family: 'Inter', sans-serif;
+           background: linear-gradient(135deg, var(--cream) 0%, #F0EBE3 100%);
+           overflow-x: hidden;
+       }
+
+       .font-display {
+           font-family: 'Playfair Display', serif;
+       }
+
+       .gradient-text {
+           background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--gold) 100%);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+       }
+
+       .glass-morphism {
+           background: rgba(255, 255, 255, 0.95);
+           backdrop-filter: blur(20px);
+           border: 1px solid rgba(255, 255, 255, 0.2);
+       }
+
+       .progress-bar {
+           height: 4px;
+           background: linear-gradient(90deg, var(--amber) 0%, var(--gold) 100%);
+           position: fixed;
+           top: 0;
+           left: 0;
+           z-index: 9999;
+           transition: width 0.3s ease;
+       }
+
+       .skip-link {
+           position: absolute;
+           top: -40px;
+           left: 0;
+           background: var(--amber);
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           z-index: 10000;
+       }
+
+       .skip-link:focus {
+           top: 0;
+       }
+
+       a:focus-visible,
+       button:focus-visible {
+           outline: 3px solid var(--amber);
+           outline-offset: 2px;
+       }
+
+       .mobile-menu {
+           display: none;
+           position: fixed;
+           top: 72px;
+           left: 0;
+           right: 0;
+           background: rgba(255, 255, 255, 0.98);
+           backdrop-filter: blur(20px);
+           padding: 1.5rem;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+           z-index: 40;
+       }
+
+       .mobile-menu.active {
+           display: block;
+       }
+
+       .mobile-menu a {
+           display: block;
+           padding: 1rem 0;
+           border-bottom: 1px solid rgba(0,0,0,0.1);
+       }
+
+       @media (prefers-reduced-motion: reduce) {
+           *,
+           *::before,
+           *::after {
+               animation-duration: 0.01ms !important;
+               animation-iteration-count: 1 !important;
+               transition-duration: 0.01ms !important;
+           }
+       }
+
+       /* Gallery styles */
+       .gallery-item {
+           position: relative;
+           overflow: hidden;
+           border-radius: 1rem;
+           cursor: pointer;
+           transition: transform 0.3s ease;
+       }
+
+       .gallery-item:hover {
+           transform: translateY(-4px);
+       }
+
+       .gallery-item img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+           transition: transform 0.5s ease;
+       }
+
+       .gallery-item:hover img {
+           transform: scale(1.1);
+       }
+
+       .gallery-overlay {
+           position: absolute;
+           inset: 0;
+           background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+           opacity: 0;
+           transition: opacity 0.3s ease;
+           display: flex;
+           flex-direction: column;
+           justify-content: flex-end;
+           padding: 1.5rem;
+       }
+
+       .gallery-item:hover .gallery-overlay {
+           opacity: 1;
+       }
+
+       /* Filter buttons */
+       .filter-btn {
+           padding: 0.75rem 1.5rem;
+           border-radius: 9999px;
+           border: 2px solid #d1d5db;
+           background: white;
+           color: #4b5563;
+           font-weight: 600;
+           transition: all 0.3s;
+           cursor: pointer;
+       }
+
+       .filter-btn:hover {
+           border-color: var(--amber);
+           color: var(--amber);
+       }
+
+       .filter-btn.active {
+           background: linear-gradient(135deg, var(--amber), #F97316);
+           border-color: var(--amber);
+           color: white;
+       }
+
+       /* Masonry layout */
+       .gallery-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+           gap: 1.5rem;
+           grid-auto-flow: dense;
+       }
+
+       .gallery-item.tall {
+           grid-row: span 2;
+       }
+
+       .gallery-item.wide {
+           grid-column: span 2;
+       }
+
+       @media (max-width: 768px) {
+           .gallery-item.wide {
+               grid-column: span 1;
+           }
+       }
+
+       /* Lightbox */
+       .lightbox {
+           display: none;
+           position: fixed;
+           inset: 0;
+           background: rgba(0, 0, 0, 0.95);
+           z-index: 1000;
+           justify-content: center;
+           align-items: center;
+           padding: 2rem;
+       }
+
+       .lightbox.active {
+           display: flex;
+       }
+
+       .lightbox img {
+           max-width: 90%;
+           max-height: 90%;
+           object-fit: contain;
+           border-radius: 0.5rem;
+       }
+
+       .lightbox-close {
+           position: absolute;
+           top: 2rem;
+           right: 2rem;
+           width: 48px;
+           height: 48px;
+           background: rgba(255, 255, 255, 0.1);
+           border: 2px solid white;
+           border-radius: 50%;
+           color: white;
+           font-size: 1.5rem;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           transition: all 0.3s;
+       }
+
+       .lightbox-close:hover {
+           background: rgba(255, 255, 255, 0.2);
+           transform: scale(1.1);
+       }
+   </style>
+</head>
+<body class="text-gray-800 leading-relaxed">
+   <a href="#main-content" class="skip-link">Skip to main content</a>
+   <div class="progress-bar" id="progressBar"></div>
+
+   <!-- Header -->
+   <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+       <div class="glass-morphism">
+           <div class="container mx-auto px-6 py-4">
+               <div class="flex justify-between items-center">
+                   <div class="flex items-center space-x-2">
+                       <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">☕</div>
+                       <h1 class="text-3xl font-display font-bold gradient-text">Brewtopia</h1>
+                   </div>
+                   <nav class="hidden md:flex space-x-8" aria-label="Main navigation">
+                       <a href="index.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Home
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+                       <a href="story.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Our Story
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+                       <a href="franchise.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Franchise Process
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+                       <a href="gallery.html" class="text-gray-900 hover:text-amber-600 transition-colors duration-300 font-semibold relative group">
+                           Gallery
+                           <span class="absolute bottom-0 left-0 w-full h-0.5 bg-amber-600"></span>
+                       </a>
+                       <a href="contact.html" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold shadow-lg">
+                           Get Started
+                       </a>
+                   </nav>
+                   <button class="md:hidden text-gray-700" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">
+                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                       </svg>
+                   </button>
+               </div>
+           </div>
+       </div>
+       <div class="mobile-menu" id="mobileMenu">
+           <a href="index.html" class="text-gray-700 hover:text-amber-600">Home</a>
+           <a href="story.html" class="text-gray-700 hover:text-amber-600">Our Story</a>
+           <a href="franchise.html" class="text-gray-700 hover:text-amber-600">Franchise Process</a>
+           <a href="gallery.html" class="font-semibold text-gray-900">Gallery</a>
+           <a href="contact.html" class="text-amber-600 font-semibold">Get Started</a>
+       </div>
+   </header>
+
+   <main id="main-content">
+       <!-- Hero Section -->
+       <section class="pt-32 pb-20 px-6 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 relative overflow-hidden">
+           <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F59E0B" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+           
+           <div class="container mx-auto max-w-4xl relative z-10 text-center">
+               <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                   Experience the Atmosphere
+               </div>
+               
+               <h2 class="text-5xl md:text-6xl font-display font-bold mb-6 gradient-text leading-tight">
+                   Welcome to Brewtopia
+               </h2>
+               
+               <p class="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                   Explore our warm, inviting spaces where exceptional coffee meets genuine community connection. See why Brewtopia is the favorite gathering place in neighborhoods across the country.
+               </p>
+           </div>
+       </section>
+
+       <!-- Filter Section -->
+       <section class="py-12 px-6 bg-white sticky top-20 z-40 shadow-sm">
+           <div class="container mx-auto max-w-6xl">
+               <div class="flex flex-wrap gap-4 justify-center">
+                   <button class="filter-btn active" data-filter="all">All</button>
+                   <button class="filter-btn" data-filter="interior">Interior Design</button>
+                   <button class="filter-btn" data-filter="coffee">Coffee & Drinks</button>
+                   <button class="filter-btn" data-filter="food">Food & Pastries</button>
+                   <button class="filter-btn" data-filter="community">Community Events</button>
+               </div>
+           </div>
+       </section>
+
+       <!-- Gallery Section -->
+       <section class="py-16 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+           <div class="container mx-auto max-w-7xl">
+               <div class="gallery-grid" id="galleryGrid">
+                   <!-- Interior Images -->
+                   <div class="gallery-item tall" data-category="interior">
+                       <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&h=800&fit=crop" alt="Cozy cafe interior with wooden furniture">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Warm Interior</h3>
+                           <p class="text-gray-200 text-sm">Inviting spaces designed for comfort</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="interior">
+                       <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&h=600&fit=crop" alt="Modern coffee shop seating area">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Comfortable Seating</h3>
+                           <p class="text-gray-200 text-sm">Perfect for work or relaxation</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item wide" data-category="interior">
+                       <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&h=600&fit=crop" alt="Coffee shop counter and bar">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Welcoming Bar Area</h3>
+                           <p class="text-gray-200 text-sm">Where the magic happens</p>
+                       </div>
+                   </div>
+
+                   <!-- Coffee & Drinks -->
+                   <div class="gallery-item" data-category="coffee">
+                       <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&h=600&fit=crop" alt="Barista pouring latte art">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Artisan Latte Art</h3>
+                           <p class="text-gray-200 text-sm">Crafted with precision and care</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item tall" data-category="coffee">
+                       <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&h=800&fit=crop" alt="Espresso machine in action">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Premium Espresso</h3>
+                           <p class="text-gray-200 text-sm">The perfect shot, every time</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="coffee">
+                       <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=600&fit=crop" alt="Coffee cup on wooden table">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Signature Brews</h3>
+                           <p class="text-gray-200 text-sm">Ethically sourced, expertly roasted</p>
+                       </div>
+                   </div>
+
+                   <!-- Food & Pastries -->
+                   <div class="gallery-item wide" data-category="food">
+                       <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&h=600&fit=crop" alt="Display case with fresh pastries">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Fresh Daily Pastries</h3>
+                           <p class="text-gray-200 text-sm">Baked with love each morning</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="food">
+                       <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&h=600&fit=crop" alt="Breakfast sandwich">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Hearty Breakfast</h3>
+                           <p class="text-gray-200 text-sm">Start your day right</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="food">
+                       <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=600&fit=crop" alt="Assorted desserts">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Sweet Treats</h3>
+                           <p class="text-gray-200 text-sm">The perfect pairing</p>
+                       </div>
+                   </div>
+
+                   <!-- Community Events -->
+                   <div class="gallery-item tall" data-category="community">
+                       <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&h=800&fit=crop" alt="People enjoying coffee together">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Community Gathering</h3>
+                           <p class="text-gray-200 text-sm">Where connections are made</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="community">
+                       <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&h=600&fit=crop" alt="Live music event at cafe">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Live Music Nights</h3>
+                           <p class="text-gray-200 text-sm">Supporting local artists</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item wide" data-category="community">
+                       <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=600&fit=crop" alt="Community meeting at coffee shop">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Meeting Space</h3>
+                           <p class="text-gray-200 text-sm">Your neighborhood hub</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="interior">
+                       <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=600&fit=crop" alt="Coffee shop storefront">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Welcoming Entrance</h3>
+                           <p class="text-gray-200 text-sm">Your home away from home</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="coffee">
+                       <img src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?w=600&h=600&fit=crop" alt="Coffee beans being roasted">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Fresh Roasted Beans</h3>
+                           <p class="text-gray-200 text-sm">Quality you can taste</p>
+                       </div>
+                   </div>
+
+                   <div class="gallery-item" data-category="interior">
+                       <img src="https://images.unsplash.com/photo-1559305616-3fc1b86d45c6?w=600&h=600&fit=crop" alt="Outdoor cafe seating">
+                       <div class="gallery-overlay">
+                           <h3 class="text-white font-bold text-xl">Outdoor Patio</h3>
+                           <p class="text-gray-200 text-sm">Enjoy the fresh air</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Video Tour Section -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-5xl text-center">
+               <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                   Virtual Tour
+               </div>
+               
+               <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+                   Experience Brewtopia
+               </h3>
+               
+               <p class="text-lg text-gray-700 mb-12 max-w-2xl mx-auto">
+                   Take a virtual tour of our flagship location and see what makes Brewtopia special.
+               </p>
+
+               <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-amber-400 to-orange-600 aspect-video flex items-center justify-center">
+                   <div class="text-center">
+                       <div class="w-20 h-20 mx-auto mb-4 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                           <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                               <path d="M8 5v14l11-7z"/>
+                           </svg>
+                       </div>
+                       <p class="text-white text-lg font-semibold">Virtual Tour Coming Soon</p>
+                   </div>
+               </div>
+
+               <p class="mt-8 text-gray-600">
+                   Want to see a location in person? <a href="contact.html" class="text-amber-600 font-semibold hover:underline">Schedule a visit</a>
+               </p>
+           </div>
+       </section>
+
+       <!-- CTA Section -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white">
+           <div class="container mx-auto max-w-4xl text-center">
+               <h3 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                   Ready to Bring Brewtopia to Your Community?
+               </h3>
+               
+               <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                   Join our family of successful franchise partners and create your own welcoming space.
+               </p>
+               
+               <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                   <a href="contact.html" class="inline-flex items-center px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105">
+                       <span class="mr-2">Apply Now</span>
+                       <span>→</span>
+                   </a>
+                   <a href="franchise.html" class="inline-flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                       <span>Learn About Process</span>
+                   </a>
+               </div>
+           </div>
+       </section>
+   </main>
+
+   <!-- Lightbox -->
+   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+       <button class="lightbox-close" id="closeLightbox" aria-label="Close image viewer">×</button>
+       <img src="" alt="" id="lightboxImg">
+   </div>
+
+   <!-- Footer -->
+   <footer class="bg-gray-900 text-gray-300 py-16">
+       <div class="container mx-auto px-6">
+           <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+               <div class="col-span-1 md:col-span-2">
+                   <div class="flex items-center space-x-2 mb-4">
+                       <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">☕</div>
+                       <h4 class="text-2xl font-display font-bold text-white">Brewtopia</h4>
+                   </div>
+                   <p class="text-gray-400 mb-6 max-w-md">Building communities one cup at a time. Join our franchise family and brew your success story.</p>
+                   <div class="flex space-x-4">
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Facebook">📘</a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Instagram">📸</a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Twitter">🐦</a>
+                   </div>
+               </div>
+               
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Quick Links</h5>
+                   <ul class="space-y-2">
+                       <li><a href="index.html" class="hover:text-amber-400 transition-colors">Home</a></li>
+                       <li><a href="story.html" class="hover:text-amber-400 transition-colors">Our Story</a></li>
+                       <li><a href="franchise.html" class="hover:text-amber-400 transition-colors">Franchise Process</a></li>
+                       <li><a href="contact.html" class="hover:text-amber-400 transition-colors">Contact</a></li>
+                   </ul>
+               </div>
+               
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Support</h5>
+                   <ul class="space-y-2">
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">FAQ</a></li>
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">Training</a></li>
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">Marketing</a></li>
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">Resources</a></li>
+                   </ul>
+               </div>
+           </div>
+           
+           <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+               <p>&copy; 2024 Brewtopia Franchise. All rights reserved. | <a href="#" class="hover:text-amber-400">Privacy Policy</a> | <a href="#" class="hover:text-amber-400">Terms of Service</a></p>
+           </div>
+       </div>
+   </footer>
+
+   <script>
+       function updateProgressBar() {
+           const scrollTop = window.scrollY;
+           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+           const scrollPercent = (scrollTop / docHeight) * 100;
+           document.getElementById('progressBar').style.width = scrollPercent + '%';
+       }
+       
+       window.addEventListener('scroll', updateProgressBar);
+
+       window.addEventListener('scroll', function() {
+           const navbar = document.getElementById('navbar');
+           if (window.scrollY > 50) {
+               navbar.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+           } else {
+               navbar.style.boxShadow = 'none';
+           }
+       });
+
+       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+       const mobileMenu = document.getElementById('mobileMenu');
+       
+       if (mobileMenuBtn && mobileMenu) {
+           mobileMenuBtn.addEventListener('click', function() {
+               const isExpanded = this.getAttribute('aria-expanded') === 'true';
+               this.setAttribute('aria-expanded', !isExpanded);
+               mobileMenu.classList.toggle('active');
+           });
+
+           document.addEventListener('click', function(event) {
+               if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                   mobileMenu.classList.remove('active');
+                   mobileMenuBtn.setAttribute('aria-expanded', 'false');
+               }
+           });
+       }
+
+       // Gallery filtering
+       const filterButtons = document.querySelectorAll('.filter-btn');
+       const galleryItems = document.querySelectorAll('.gallery-item');
+
+       filterButtons.forEach(button => {
+           button.addEventListener('click', function() {
+               const filter = this.getAttribute('data-filter');
+
+               filterButtons.forEach(btn => btn.classList.remove('active'));
+               this.classList.add('active');
+
+               galleryItems.forEach(item => {
+                   if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                       item.style.display = 'block';
+                   } else {
+                       item.style.display = 'none';
+                   }
+               });
+           });
+       });
+
+       // Lightbox functionality
+       const lightbox = document.getElementById('lightbox');
+       const lightboxImg = document.getElementById('lightboxImg');
+       const closeLightbox = document.getElementById('closeLightbox');
+
+       galleryItems.forEach(item => {
+           item.addEventListener('click', function() {
+               const img = this.querySelector('img');
+               lightboxImg.src = img.src;
+               lightboxImg.alt = img.alt;
+               lightbox.classList.add('active');
+               document.body.style.overflow = 'hidden';
+           });
+       });
+
+       closeLightbox.addEventListener('click', function() {
+           lightbox.classList.remove('active');
+           document.body.style.overflow = 'auto';
+       });
+
+       lightbox.addEventListener('click', function(e) {
+           if (e.target === lightbox) {
+               lightbox.classList.remove('active');
+               document.body.style.overflow = 'auto';
+           }
+       });
+
+       document.addEventListener('keydown', function(e) {
+           if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+               lightbox.classList.remove('active');
+               document.body.style.overflow = 'auto';
+           }
+       });
+   </script>
+</body>
+</html>
