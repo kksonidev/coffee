@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Our Story - Brewtopia Franchise</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+   <style>
+       :root {
+           --coffee-dark: #2C1810;
+           --coffee-medium: #4A2C17;
+           --coffee-light: #8B4513;
+           --cream: #F5F1EB;
+           --gold: #D4A574;
+           --amber: #F59E0B;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+       body {
+           font-family: 'Inter', sans-serif;
+           background: linear-gradient(135deg, var(--cream) 0%, #F0EBE3 100%);
+           overflow-x: hidden;
+       }
+
+       .font-display {
+           font-family: 'Playfair Display', serif;
+       }
+
+       .gradient-text {
+           background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--gold) 100%);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+       }
+
+       .glass-morphism {
+           background: rgba(255, 255, 255, 0.95);
+           backdrop-filter: blur(20px);
+           border: 1px solid rgba(255, 255, 255, 0.2);
+       }
+
+       .hover-lift {
+           transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+       }
+
+       .hover-lift:hover {
+           transform: translateY(-8px) scale(1.02);
+       }
+
+       .progress-bar {
+           height: 4px;
+           background: linear-gradient(90deg, var(--amber) 0%, var(--gold) 100%);
+           position: fixed;
+           top: 0;
+           left: 0;
+           z-index: 9999;
+           transition: width 0.3s ease;
+       }
+
+       .skip-link {
+           position: absolute;
+           top: -40px;
+           left: 0;
+           background: var(--amber);
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           z-index: 10000;
+       }
+
+       .skip-link:focus {
+           top: 0;
+       }
+
+       a:focus-visible,
+       button:focus-visible,
+       input:focus-visible {
+           outline: 3px solid var(--amber);
+           outline-offset: 2px;
+       }
+
+       .mobile-menu {
+           display: none;
+           position: fixed;
+           top: 72px;
+           left: 0;
+           right: 0;
+           background: rgba(255, 255, 255, 0.98);
+           backdrop-filter: blur(20px);
+           padding: 1.5rem;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+           z-index: 40;
+       }
+
+       .mobile-menu.active {
+           display: block;
+       }
+
+       .mobile-menu a {
+           display: block;
+           padding: 1rem 0;
+           border-bottom: 1px solid rgba(0,0,0,0.1);
+       }
+
+       @media (prefers-reduced-motion: reduce) {
+           *,
+           *::before,
+           *::after {
+               animation-duration: 0.01ms !important;
+               animation-iteration-count: 1 !important;
+               transition-duration: 0.01ms !important;
+           }
+       }
+
+       .timeline-dot {
+           position: absolute;
+           left: 50%;
+           transform: translateX(-50%);
+           width: 20px;
+           height: 20px;
+           background: var(--amber);
+           border: 4px solid white;
+           border-radius: 50%;
+           box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+       }
+
+       .timeline-line {
+           position: absolute;
+           left: 50%;
+           top: 0;
+           bottom: 0;
+           width: 2px;
+           background: linear-gradient(180deg, var(--amber), var(--gold));
+           transform: translateX(-50%);
+       }
+
+       @media (max-width: 768px) {
+           .timeline-line {
+               left: 20px;
+           }
+           .timeline-dot {
+               left: 20px;
+           }
+       }
+
+       /* Testimonial card styling */
+       .testimonial-card {
+           position: relative;
+           padding: 2rem;
+           background: white;
+           border-radius: 1.5rem;
+           box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+           border: 2px solid #FDE68A;
+       }
+
+       .testimonial-card::before {
+           content: '"';
+           position: absolute;
+           top: -10px;
+           left: 20px;
+           font-size: 4rem;
+           color: var(--amber);
+           font-family: 'Playfair Display', serif;
+           line-height: 1;
+       }
+   </style>
+</head>
+<body class="text-gray-800 leading-relaxed">
+   <a href="#main-content" class="skip-link">Skip to main content</a>
+   <div class="progress-bar" id="progressBar"></div>
+
+   <!-- Header -->
+   <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+       <div class="glass-morphism">
+           <div class="container mx-auto px-6 py-4">
+               <div class="flex justify-between items-center">
+                   <div class="flex items-center space-x-2">
+                       <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">☕</div>
+                       <h1 class="text-3xl font-display font-bold gradient-text">Brewtopia</h1>
+                   </div>
+                   <nav class="hidden md:flex space-x-8" aria-label="Main navigation">
+                       <a href="index.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Home
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+                       <a href="story.html" class="text-gray-900 hover:text-amber-600 transition-colors duration-300 font-semibold relative group">
+                           Our Story
+                           <span class="absolute bottom-0 left-0 w-full h-0.5 bg-amber-600"></span>
+                       </a>
+                       <a href="franchise.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Franchise Process
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+                       <a href="gallery.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Gallery
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+                       <a href="contact.html" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold shadow-lg">
+                           Get Started
+                       </a>
+                   </nav>
+                   <button class="md:hidden text-gray-700" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">
+                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                       </svg>
+                   </button>
+               </div>
+           </div>
+       </div>
+       <div class="mobile-menu" id="mobileMenu">
+           <a href="index.html" class="text-gray-700 hover:text-amber-600">Home</a>
+           <a href="story.html" class="font-semibold text-gray-900">Our Story</a>
+           <a href="franchise.html" class="text-gray-700 hover:text-amber-600">Franchise Process</a>
+           <a href="gallery.html" class="text-gray-700 hover:text-amber-600">Gallery</a>
+           <a href="contact.html" class="text-amber-600 font-semibold">Get Started</a>
+       </div>
+   </header>
+
+   <main id="main-content">
+       <!-- Hero Section -->
+       <section class="pt-32 pb-20 px-6 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 relative overflow-hidden">
+           <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F59E0B" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+           
+           <div class="container mx-auto max-w-4xl relative z-10 text-center">
+               <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                   Our Journey
+               </div>
+               
+               <h2 class="text-5xl md:text-6xl font-display font-bold mb-6 gradient-text leading-tight">
+                   From One Small Café to a Thriving Family
+               </h2>
+               
+               <p class="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                   Discover how a passion for exceptional coffee and genuine community connection grew into one of the most successful franchise opportunities in the industry.
+               </p>
+           </div>
+       </section>
+
+       <!-- Origin Story -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-7xl">
+               <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                   <div class="relative group">
+                       <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 rounded-3xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300"></div>
+                       <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=600&fit=crop" alt="First Brewtopia café" class="relative rounded-3xl shadow-2xl w-full hover-lift">
+                       <div class="absolute -bottom-6 -right-6 w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl">
+                           <span class="text-3xl">2009</span>
+                       </div>
+                   </div>
+                   
+                   <div class="space-y-6">
+                       <h3 class="text-4xl font-display font-bold text-gray-900 leading-tight">
+                           Where It All <span class="gradient-text">Began</span>
+                       </h3>
+                       
+                       <p class="text-lg text-gray-700 leading-relaxed">
+                           In 2009, founders Maria and James Chen opened the first Brewtopia in Portland, Oregon. What started as a small neighborhood coffee shop with just four tables quickly became the heart of the community.
+                       </p>
+                       
+                       <p class="text-lg text-gray-700 leading-relaxed">
+                           Their commitment to sourcing the finest ethically-grown beans, training skilled baristas, and creating a welcoming atmosphere attracted a loyal following. Within two years, customers from neighboring towns were driving hours just to experience what made Brewtopia special.
+                       </p>
+                       
+                       <p class="text-lg text-gray-700 leading-relaxed">
+                           By 2012, demand for Brewtopia's unique approach led to the franchise model. Today, we're proud to support over 150 franchise partners across North America, each bringing Brewtopia's values to their own communities.
+                       </p>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Timeline Section -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+           <div class="container mx-auto max-w-5xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+                       Our <span class="gradient-text">Milestones</span>
+                   </h3>
+                   <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                       Fifteen years of growth, innovation, and community building.
+                   </p>
+               </div>
+
+               <div class="relative">
+                   <div class="timeline-line"></div>
+                   
+                   <!-- Timeline Item 1 -->
+                   <div class="mb-12 md:mb-16 relative pl-16 md:pl-0">
+                       <div class="timeline-dot"></div>
+                       <div class="md:w-1/2 md:ml-auto md:pl-16">
+                           <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">
+                               <div class="text-2xl font-bold text-amber-600 mb-2">2009</div>
+                               <h4 class="text-xl font-bold text-gray-900 mb-2">The Beginning</h4>
+                               <p class="text-gray-700">First Brewtopia café opens in Portland, Oregon.</p>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Timeline Item 2 -->
+                   <div class="mb-12 md:mb-16 relative pl-16 md:pl-0">
+                       <div class="timeline-dot"></div>
+                       <div class="md:w-1/2 md:pr-16">
+                           <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">
+                               <div class="text-2xl font-bold text-amber-600 mb-2">2012</div>
+                               <h4 class="text-xl font-bold text-gray-900 mb-2">Franchise Launch</h4>
+                               <p class="text-gray-700">Opened first franchise location and welcomed our first partners.</p>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Timeline Item 3 -->
+                   <div class="mb-12 md:mb-16 relative pl-16 md:pl-0">
+                       <div class="timeline-dot"></div>
+                       <div class="md:w-1/2 md:ml-auto md:pl-16">
+                           <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">
+                               <div class="text-2xl font-bold text-amber-600 mb-2">2016</div>
+                               <h4 class="text-xl font-bold text-gray-900 mb-2">50 Locations</h4>
+                               <p class="text-gray-700">Reached 50 locations across 12 states, exceeding growth projections.</p>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Timeline Item 4 -->
+                   <div class="mb-12 md:mb-16 relative pl-16 md:pl-0">
+                       <div class="timeline-dot"></div>
+                       <div class="md:w-1/2 md:pr-16">
+                           <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">
+                               <div class="text-2xl font-bold text-amber-600 mb-2">2019</div>
+                               <h4 class="text-xl font-bold text-gray-900 mb-2">Sustainability Initiative</h4>
+                               <p class="text-gray-700">Launched carbon-neutral operations and direct-trade coffee sourcing program.</p>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Timeline Item 5 -->
+                   <div class="relative pl-16 md:pl-0">
+                       <div class="timeline-dot"></div>
+                       <div class="md:w-1/2 md:ml-auto md:pl-16">
+                           <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">
+                               <div class="text-2xl font-bold text-amber-600 mb-2">2024</div>
+                               <h4 class="text-xl font-bold text-gray-900 mb-2">150+ Strong</h4>
+                               <p class="text-gray-700">Celebrating 150+ locations and maintaining 98% franchise satisfaction rate.</p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Stats Section - IMPROVEMENT #8: Value Proposition Clarity -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white">
+           <div class="container mx-auto max-w-6xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                       By the Numbers
+                   </h3>
+                   <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                       Real results from our franchise partners across North America.
+                   </p>
+               </div>
+
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                   <div class="text-center p-6 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20">
+                       <div class="text-5xl font-bold text-amber-400 mb-2">$250K-$500K</div>
+                       <div class="text-lg font-semibold mb-2">Total Investment</div>
+                       <div class="text-sm text-gray-300">Including franchise fee, equipment, and initial inventory</div>
+                   </div>
+
+                   <div class="text-center p-6 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20">
+                       <div class="text-5xl font-bold text-amber-400 mb-2">18-24</div>
+                       <div class="text-lg font-semibold mb-2">Months to Profitability</div>
+                       <div class="text-sm text-gray-300">Average time for franchise partners to reach positive cash flow</div>
+                   </div>
+
+                   <div class="text-center p-6 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20">
+                       <div class="text-5xl font-bold text-amber-400 mb-2">$450K</div>
+                       <div class="text-lg font-semibold mb-2">Average Annual Revenue</div>
+                       <div class="text-sm text-gray-300">Based on established locations (years 3+)</div>
+                   </div>
+
+                   <div class="text-center p-6 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20">
+                       <div class="text-5xl font-bold text-amber-400 mb-2">98%</div>
+                       <div class="text-lg font-semibold mb-2">Partner Satisfaction</div>
+                       <div class="text-sm text-gray-300">Franchise partners who would recommend Brewtopia</div>
+                   </div>
+               </div>
+
+               <div class="mt-12 text-center">
+                   <p class="text-sm text-gray-300 italic">
+                       *Financial performance varies by location. See our Franchise Disclosure Document for details.
+                   </p>
+               </div>
+           </div>
+       </section>
+
+       <!-- Testimonials Section - IMPROVEMENT #9: Social Proof -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-6xl">
+               <div class="text-center mb-16">
+                   <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                       Success Stories
+                   </div>
+                   <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+                       What Our Partners Say
+                   </h3>
+                   <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                       Real experiences from franchise owners who've built thriving businesses with Brewtopia.
+                   </p>
+               </div>
+
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                   <!-- Testimonial 1 -->
+                   <div class="testimonial-card">
+                       <p class="text-gray-700 mb-6 leading-relaxed pt-4">
+                           Opening my Brewtopia franchise was the best business decision I've ever made. The training was comprehensive, the support is ongoing, and I reached profitability in just 16 months.
+                       </p>
+                       <div class="flex items-center">
+                           <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
+                               SC
+                           </div>
+                           <div>
+                               <div class="font-bold text-gray-900">Sarah Chen</div>
+                               <div class="text-sm text-gray-600">Austin, TX • Since 2019</div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Testimonial 2 -->
+                   <div class="testimonial-card">
+                       <p class="text-gray-700 mb-6 leading-relaxed pt-4">
+                           After 20 years in corporate America, I wanted to build something of my own. Brewtopia gave me the tools, training, and community support to succeed. Now I own three locations!
+                       </p>
+                       <div class="flex items-center">
+                           <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
+                               MR
+                           </div>
+                           <div>
+                               <div class="font-bold text-gray-900">Michael Rodriguez</div>
+                               <div class="text-sm text-gray-600">Denver, CO • Since 2017</div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Testimonial 3 -->
+                   <div class="testimonial-card">
+                       <p class="text-gray-700 mb-6 leading-relaxed pt-4">
+                           The franchise team truly cares about our success. From site selection to grand opening to ongoing operations, they've been there every step of the way. My café is now the heart of our community.
+                       </p>
+                       <div class="flex items-center">
+                           <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
+                               LP
+                           </div>
+                           <div>
+                               <div class="font-bold text-gray-900">Lisa Patel</div>
+                               <div class="text-sm text-gray-600">Seattle, WA • Since 2020</div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Mission & Values -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+           <div class="container mx-auto max-w-4xl text-center">
+               <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-12">
+                   Our Core Values
+               </h3>
+
+               <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                   <div class="p-8 bg-white rounded-2xl shadow-lg">
+                       <div class="text-5xl mb-4">☕</div>
+                       <h4 class="text-xl font-bold text-gray-900 mb-3">Quality First</h4>
+                       <p class="text-gray-700">Never compromising on the excellence of our coffee, ingredients, or service.</p>
+                   </div>
+
+                   <div class="p-8 bg-white rounded-2xl shadow-lg">
+                       <div class="text-5xl mb-4">🌍</div>
+                       <h4 class="text-xl font-bold text-gray-900 mb-3">Sustainability</h4>
+                       <p class="text-gray-700">Committed to ethical sourcing and carbon-neutral operations in every location.</p>
+                   </div>
+
+                   <div class="p-8 bg-white rounded-2xl shadow-lg">
+                       <div class="text-5xl mb-4">❤️</div>
+                       <h4 class="text-xl font-bold text-gray-900 mb-3">Community</h4>
+                       <p class="text-gray-700">Building genuine connections and becoming the gathering place in every neighborhood.</p>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- CTA Section -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white">
+           <div class="container mx-auto max-w-4xl text-center">
+               <h3 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                   Ready to Write Your Success Story?
+               </h3>
+               
+               <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                   Join our family of successful franchise partners and bring Brewtopia to your community.
+               </p>
+               
+               <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                   <a href="contact.html" class="inline-flex items-center px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105">
+                       <span class="mr-2">Apply Now</span>
+                       <span>→</span>
+                   </a>
+                   <a href="franchise.html" class="inline-flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                       <span>View Franchise Process</span>
+                   </a>
+               </div>
+           </div>
+       </section>
+   </main>
+
+   <!-- Footer -->
+   <footer class="bg-gray-900 text-gray-300 py-16">
+       <div class="container mx-auto px-6">
+           <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+               <div class="col-span-1 md:col-span-2">
+                   <div class="flex items-center space-x-2 mb-4">
+                       <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">☕</div>
+                       <h4 class="text-2xl font-display font-bold text-white">Brewtopia</h4>
+                   </div>
+                   <p class="text-gray-400 mb-6 max-w-md">Building communities one cup at a time. Join our franchise family and brew your success story.</p>
+                   <div class="flex space-x-4">
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Facebook">📘</a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Instagram">📸</a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Twitter">🐦</a>
+                   </div>
+               </div>
+               
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Quick Links</h5>
+                   <ul class="space-y-2">
+                       <li><a href="index.html" class="hover:text-amber-400 transition-colors">Home</a></li>
+                       <li><a href="story.html" class="hover:text-amber-400 transition-colors">Our Story</a></li>
+                       <li><a href="franchise.html" class="hover:text-amber-400 transition-colors">Franchise Process</a></li>
+                       <li><a href="contact.html" class="hover:text-amber-400 transition-colors">Contact</a></li>
+                   </ul>
+               </div>
+               
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Support</h5>
+                   <ul class="space-y-2">
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">FAQ</a></li>
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">Training</a></li>
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">Marketing</a></li>
+                       <li><a href="#" class="hover:text-amber-400 transition-colors">Resources</a></li>
+                   </ul>
+               </div>
+           </div>
+           
+           <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+               <p>&copy; 2024 Brewtopia Franchise. All rights reserved. | <a href="#" class="hover:text-amber-400">Privacy Policy</a> | <a href="#" class="hover:text-amber-400">Terms of Service</a></p>
+           </div>
+       </div>
+   </footer>
+
+   <script>
+       function updateProgressBar() {
+           const scrollTop = window.scrollY;
+           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+           const scrollPercent = (scrollTop / docHeight) * 100;
+           document.getElementById('progressBar').style.width = scrollPercent + '%';
+       }
+       
+       window.addEventListener('scroll', updateProgressBar);
+
+       window.addEventListener('scroll', function() {
+           const navbar = document.getElementById('navbar');
+           if (window.scrollY > 50) {
+               navbar.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+           } else {
+               navbar.style.boxShadow = 'none';
+           }
+       });
+
+       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+       const mobileMenu = document.getElementById('mobileMenu');
+       
+       if (mobileMenuBtn && mobileMenu) {
+           mobileMenuBtn.addEventListener('click', function() {
+               const isExpanded = this.getAttribute('aria-expanded') === 'true';
+               this.setAttribute('aria-expanded', !isExpanded);
+               mobileMenu.classList.toggle('active');
+           });
+
+           document.addEventListener('click', function(event) {
+               if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                   mobileMenu.classList.remove('active');
+                   mobileMenuBtn.setAttribute('aria-expanded', 'false');
+               }
+           });
+       }
+   </script>
+</body>
+</html>
