@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop - Brewtopia Coffee & Merchandise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --coffee-dark: #2c1810;
+        --coffee-medium: #4a2c17;
+        --coffee-light: #8b4513;
+        --cream: #f5f1eb;
+        --gold: #d4a574;
+        --amber: #f59e0b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, var(--cream) 0%, #f0ebe3 100%);
+      }
+
+      .font-display {
+        font-family: "Playfair Display", serif;
+      }
+
+      .gradient-text {
+        background: linear-gradient(
+          135deg,
+          var(--coffee-dark) 0%,
+          var(--coffee-medium) 50%,
+          var(--gold) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .glass-morphism {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .progress-bar {
+        height: 4px;
+        background: linear-gradient(90deg, var(--amber) 0%, var(--gold) 100%);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        transition: width 0.3s ease;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--amber);
+        color: white;
+        padding: 8px 16px;
+        text-decoration: none;
+        z-index: 10000;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid var(--amber);
+        outline-offset: 2px;
+      }
+
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        z-index: 40;
+      }
+
+      .mobile-menu.active {
+        display: block;
+      }
+
+      .mobile-menu a {
+        display: block;
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 2px solid #fde68a;
+        transition: all 0.3s ease;
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        border-color: var(--amber);
+      }
+
+      .product-image {
+        position: relative;
+        overflow: hidden;
+        padding-top: 100%;
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+      }
+
+      .product-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .product-card:hover .product-image img {
+        transform: scale(1.1);
+      }
+
+      .badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1rem;
+        background: var(--amber);
+        color: white;
+        font-weight: bold;
+        font-size: 0.75rem;
+        border-radius: 9999px;
+        text-transform: uppercase;
+      }
+
+      .cart-icon {
+        position: relative;
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 20px;
+        height: 20px;
+        background: var(--amber);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      .filter-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        border: 2px solid #d1d5db;
+        background: white;
+        color: #4b5563;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .filter-btn:hover {
+        border-color: var(--amber);
+        color: var(--amber);
+      }
+
+      .filter-btn.active {
+        background: linear-gradient(135deg, var(--amber), #f97316);
+        border-color: var(--amber);
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="text-gray-800 leading-relaxed">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header with Cart -->
+    <!-- HEADER - Single Line Navigation -->
+    <header
+      class="fixed w-full top-0 z-50 transition-all duration-300"
+      id="navbar"
+    >
+      <div class="glass-morphism">
+        <div class="container mx-auto px-6 py-4">
+          <div class="flex justify-between items-center">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center space-x-2">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl"
+              >
+                ☕
+              </div>
+              <h1 class="text-3xl font-display font-bold gradient-text">
+                Brewtopia
+              </h1>
+            </a>
+
+            <!-- Desktop Navigation - Single Line -->
+            <nav
+              class="hidden xl:flex items-center space-x-6"
+              aria-label="Main navigation"
+            >
+              <a
+                href="index.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Home
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="story.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Our Story
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="locator.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Find Store
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="gallery.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Gallery
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="shop.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Shop
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="careers.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Careers
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="barista.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Be a Barista
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="franchise.html"
+                class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group"
+              >
+                Franchise
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </a>
+
+              <a
+                href="contact.html"
+                class="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold shadow-lg"
+              >
+                Apply Now
+              </a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button
+              class="xl:hidden text-gray-700"
+              id="mobileMenuBtn"
+              aria-label="Toggle mobile menu"
+              aria-expanded="false"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="text-gray-900 font-semibold">Home</a>
+        <a href="story.html" class="text-gray-700 hover:text-amber-600"
+          >Our Story</a
+        >
+        <a href="locator.html" class="text-gray-700 hover:text-amber-600"
+          >Find Store</a
+        >
+        <a href="gallery.html" class="text-gray-700 hover:text-amber-600"
+          >Gallery</a
+        >
+        <a href="shop.html" class="text-gray-700 hover:text-amber-600">Shop</a>
+        <a href="careers.html" class="text-gray-700 hover:text-amber-600"
+          >Careers</a
+        >
+        <a href="barista.html" class="text-gray-700 hover:text-amber-600"
+          >Be a Barista</a
+        >
+        <a href="franchise.html" class="text-gray-700 hover:text-amber-600"
+          >Franchise</a
+        >
+        <a href="contact.html" class="text-amber-600 font-semibold"
+          >Apply Now</a
+        >
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Hero Section -->
+      <section
+        class="pt-32 pb-16 px-6 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50"
+      >
+        <div class="container mx-auto max-w-6xl text-center">
+          <h2
+            class="text-5xl md:text-6xl font-display font-bold mb-6 gradient-text leading-tight"
+          >
+            Bring Brewtopia Home
+          </h2>
+          <p class="text-xl text-gray-700 mb-8">
+            Premium coffee beans, brewing equipment, and exclusive merchandise
+          </p>
+
+          <!-- Category Filters -->
+          <div class="flex flex-wrap gap-4 justify-center">
+            <button class="filter-btn active" data-category="all">
+              All Products
+            </button>
+            <button class="filter-btn" data-category="coffee">
+              Coffee Beans
+            </button>
+            <button class="filter-btn" data-category="equipment">
+              Equipment
+            </button>
+            <button class="filter-btn" data-category="merchandise">
+              Merchandise
+            </button>
+            <button class="filter-btn" data-category="gifts">Gift Sets</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products Grid -->
+      <section class="py-16 px-6 bg-white">
+        <div class="container mx-auto max-w-7xl">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          >
+            <!-- Product 1 -->
+            <div class="product-card" data-category="coffee">
+              <div class="product-image">
+                <span class="badge">Best Seller</span>
+                <img
+                  src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=400&fit=crop"
+                  alt="House Blend Coffee"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  House Blend
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  Medium roast • Smooth & balanced
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$16.99</span>
+                  <span class="text-sm text-gray-600">12 oz</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card" data-category="coffee">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=400&fit=crop"
+                  alt="Dark Roast Coffee"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Bold & Dark
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  Dark roast • Rich & intense
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$17.99</span>
+                  <span class="text-sm text-gray-600">12 oz</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card" data-category="coffee">
+              <div class="product-image">
+                <span class="badge">New</span>
+                <img
+                  src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=400&fit=crop"
+                  alt="Ethiopian Single Origin"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Ethiopian Yirgacheffe
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  Light roast • Floral & fruity
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$21.99</span>
+                  <span class="text-sm text-gray-600">12 oz</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card" data-category="coffee">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&h=400&fit=crop"
+                  alt="Decaf Coffee"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Decaf Colombia
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  Medium roast • Full flavor, no caffeine
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$18.99</span>
+                  <span class="text-sm text-gray-600">12 oz</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card" data-category="equipment">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&h=400&fit=crop"
+                  alt="Pour Over Set"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Pour Over Kit
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  Complete set • Ceramic dripper
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$39.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card" data-category="equipment">
+              <div class="product-image">
+                <span class="badge">Professional</span>
+                <img
+                  src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop"
+                  alt="Espresso Machine"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Home Espresso Maker
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  15-bar pump • Milk frother included
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$299.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 7 -->
+            <div class="product-card" data-category="equipment">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&h=400&fit=crop"
+                  alt="Grinder"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Burr Coffee Grinder
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  40 grind settings • Consistent results
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$79.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 8 -->
+            <div class="product-card" data-category="merchandise">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400&h=400&fit=crop"
+                  alt="Travel Mug"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Insulated Travel Mug
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  16 oz • Keeps hot 6 hours
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$24.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 9 -->
+            <div class="product-card" data-category="merchandise">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1556742393-d75f468bfcb0?w=400&h=400&fit=crop"
+                  alt="T-Shirt"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Brewtopia T-Shirt
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  100% cotton • Multiple colors
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$19.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 10 -->
+            <div class="product-card" data-category="gifts">
+              <div class="product-image">
+                <span class="badge">Gift Set</span>
+                <img
+                  src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=400&fit=crop"
+                  alt="Gift Set"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Coffee Lover's Gift Box
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  3 blends • Mug • Gift card
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$59.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 11 -->
+            <div class="product-card" data-category="gifts">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?w=400&h=400&fit=crop"
+                  alt="Subscription Box"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  Monthly Subscription
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  New blend each month • Free shipping
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600"
+                    >$24.99<span class="text-sm text-gray-600">/mo</span></span
+                  >
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Subscribe
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 12 -->
+            <div class="product-card" data-category="equipment">
+              <div class="product-image">
+                <img
+                  src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&h=400&fit=crop"
+                  alt="French Press"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">
+                  French Press
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  34 oz • Borosilicate glass
+                </p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl font-bold text-amber-600">$34.99</span>
+                </div>
+                <button
+                  class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-semibold"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Shipping Info -->
+      <section class="py-16 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+        <div class="container mx-auto max-w-5xl">
+          <div class="grid md:grid-cols-3 gap-8 text-center">
+            <div>
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-2xl"
+              >
+                🚚
+              </div>
+              <h4 class="font-bold text-lg text-gray-900 mb-2">
+                Free Shipping
+              </h4>
+              <p class="text-gray-700 text-sm">On orders over $50</p>
+            </div>
+
+            <div>
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-2xl"
+              >
+                ↩️
+              </div>
+              <h4 class="font-bold text-lg text-gray-900 mb-2">Easy Returns</h4>
+              <p class="text-gray-700 text-sm">30-day satisfaction guarantee</p>
+            </div>
+
+            <div>
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-2xl"
+              >
+                🌱
+              </div>
+              <h4 class="font-bold text-lg text-gray-900 mb-2">
+                Sustainably Sourced
+              </h4>
+              <p class="text-gray-700 text-sm">Ethically grown and traded</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-16">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          <!-- Brand Column -->
+          <div class="lg:col-span-2">
+            <div class="flex items-center space-x-2 mb-4">
+              <div
+                class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold"
+              >
+                ☕
+              </div>
+              <h4 class="text-2xl font-display font-bold text-white">
+                Brewtopia
+              </h4>
+            </div>
+            <p class="text-gray-400 mb-6 max-w-md">
+              Building communities one cup at a time. Join our franchise family
+              or find your perfect role in our growing team.
+            </p>
+            <div class="flex space-x-4 mb-6">
+              <a
+                href="#"
+                class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors"
+                aria-label="Facebook"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors"
+                aria-label="Instagram"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors"
+                aria-label="Twitter"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div class="text-sm text-gray-400">
+              <p>
+                Email:
+                <a href="mailto:info@brewtopia.com" class="hover:text-amber-400"
+                  >info@brewtopia.com</a
+                >
+              </p>
+              <p>
+                Phone:
+                <a href="tel:1-800-BREWTOPIA" class="hover:text-amber-400"
+                  >1-800-BREWTOPIA</a
+                >
+              </p>
+            </div>
+          </div>
+
+          <!-- Company -->
+          <div>
+            <h5 class="text-white font-semibold mb-4">Company</h5>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="index.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="story.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Our Story</a
+                >
+              </li>
+              <li>
+                <a
+                  href="gallery.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Gallery</a
+                >
+              </li>
+              <li>
+                <a
+                  href="shop.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Shop</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Franchise -->
+          <div>
+            <h5 class="text-white font-semibold mb-4">Franchise</h5>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="franchise.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Franchise Process</a
+                >
+              </li>
+              <li>
+                <a
+                  href="contact.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Apply Now</a
+                >
+              </li>
+              <li>
+                <a
+                  href="locator.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Find a Store</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Careers -->
+          <div>
+            <h5 class="text-white font-semibold mb-4">Join Our Team</h5>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="careers.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >All Positions</a
+                >
+              </li>
+              <li>
+                <a
+                  href="barista.html"
+                  class="hover:text-amber-400 transition-colors"
+                  >Be a Barista</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-gray-800 mt-12 pt-8">
+          <div
+            class="flex flex-col md:flex-row justify-between items-center gap-4"
+          >
+            <p class="text-sm text-center md:text-left">
+              &copy; 2024 Brewtopia. All rights reserved.
+            </p>
+            <div class="flex flex-wrap gap-6 text-sm">
+              <a href="#" class="hover:text-amber-400 transition-colors"
+                >Privacy Policy</a
+              >
+              <a href="#" class="hover:text-amber-400 transition-colors"
+                >Terms of Service</a
+              >
+              <a href="#" class="hover:text-amber-400 transition-colors"
+                >Accessibility</a
+              >
+              <a href="#" class="hover:text-amber-400 transition-colors"
+                >Sitemap</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      function updateProgressBar() {
+        const scrollTop = window.scrollY;
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        document.getElementById("progressBar").style.width =
+          scrollPercent + "%";
+      }
+
+      window.addEventListener("scroll", updateProgressBar);
+
+      window.addEventListener("scroll", function () {
+        const navbar = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          navbar.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+        } else {
+          navbar.style.boxShadow = "none";
+        }
+      });
+
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener("click", function () {
+          const isExpanded = this.getAttribute("aria-expanded") === "true";
+          this.setAttribute("aria-expanded", !isExpanded);
+          mobileMenu.classList.toggle("active");
+        });
+
+        document.addEventListener("click", function (event) {
+          if (
+            !mobileMenuBtn.contains(event.target) &&
+            !mobileMenu.contains(event.target)
+          ) {
+            mobileMenu.classList.remove("active");
+            mobileMenuBtn.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+
+      // Category filtering
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      const productCards = document.querySelectorAll(".product-card");
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          const category = this.getAttribute("data-category");
+
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          this.classList.add("active");
+
+          productCards.forEach((card) => {
+            if (
+              category === "all" ||
+              card.getAttribute("data-category") === category
+            ) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+
+      // Add to cart functionality
+      let cartCount = 0;
+      const cartCountElement = document.getElementById("cartCount");
+      const addToCartButtons = document.querySelectorAll(
+        ".product-card button"
+      );
+
+      addToCartButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          cartCount++;
+          cartCountElement.textContent = cartCount;
+
+          const originalText = this.textContent;
+          this.textContent = "✓ Added";
+          this.style.background = "linear-gradient(135deg, #10B981, #059669)";
+
+          setTimeout(() => {
+            this.textContent = originalText;
+            this.style.background = "";
+          }, 1500);
+        });
+      });
+    </script>
+  </body>
+</html>

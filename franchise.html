@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Franchise Process - Brewtopia</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+   <style>
+       :root {
+           --coffee-dark: #2C1810;
+           --coffee-medium: #4A2C17;
+           --coffee-light: #8B4513;
+           --cream: #F5F1EB;
+           --gold: #D4A574;
+           --amber: #F59E0B;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+       body {
+           font-family: 'Inter', sans-serif;
+           background: linear-gradient(135deg, var(--cream) 0%, #F0EBE3 100%);
+           overflow-x: hidden;
+       }
+
+       .font-display {
+           font-family: 'Playfair Display', serif;
+       }
+
+       .gradient-text {
+           background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--gold) 100%);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+       }
+
+       .glass-morphism {
+           background: rgba(255, 255, 255, 0.95);
+           backdrop-filter: blur(20px);
+           border: 1px solid rgba(255, 255, 255, 0.2);
+       }
+
+       .hover-lift {
+           transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+       }
+
+       .hover-lift:hover {
+           transform: translateY(-8px) scale(1.02);
+       }
+
+       .progress-bar {
+           height: 4px;
+           background: linear-gradient(90deg, var(--amber) 0%, var(--gold) 100%);
+           position: fixed;
+           top: 0;
+           left: 0;
+           z-index: 9999;
+           transition: width 0.3s ease;
+       }
+
+       .skip-link {
+           position: absolute;
+           top: -40px;
+           left: 0;
+           background: var(--amber);
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           z-index: 10000;
+       }
+
+       .skip-link:focus {
+           top: 0;
+       }
+
+       a:focus-visible,
+       button:focus-visible,
+       input:focus-visible {
+           outline: 3px solid var(--amber);
+           outline-offset: 2px;
+       }
+
+       .mobile-menu {
+           display: none;
+           position: fixed;
+           top: 72px;
+           left: 0;
+           right: 0;
+           background: rgba(255, 255, 255, 0.98);
+           backdrop-filter: blur(20px);
+           padding: 1.5rem;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+           z-index: 40;
+       }
+
+       .mobile-menu.active {
+           display: block;
+       }
+
+       .mobile-menu a {
+           display: block;
+           padding: 1rem 0;
+           border-bottom: 1px solid rgba(0,0,0,0.1);
+       }
+
+       @media (prefers-reduced-motion: reduce) {
+           *,
+           *::before,
+           *::after {
+               animation-duration: 0.01ms !important;
+               animation-iteration-count: 1 !important;
+               transition-duration: 0.01ms !important;
+           }
+       }
+
+       /* FAQ Accordion */
+       .faq-item {
+           border-bottom: 1px solid #e5e7eb;
+       }
+
+       .faq-question {
+           width: 100%;
+           text-align: left;
+           padding: 1.5rem 0;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           cursor: pointer;
+           transition: color 0.3s;
+       }
+
+       .faq-question:hover {
+           color: var(--amber);
+       }
+
+       .faq-answer {
+           max-height: 0;
+           overflow: hidden;
+           transition: max-height 0.3s ease-out;
+       }
+
+       .faq-answer.active {
+           max-height: 500px;
+           transition: max-height 0.5s ease-in;
+       }
+
+       .faq-icon {
+           transition: transform 0.3s;
+       }
+
+       .faq-icon.active {
+           transform: rotate(180deg);
+       }
+
+       /* Process Step Cards */
+       .step-card {
+           position: relative;
+           background: white;
+           border-radius: 1.5rem;
+           padding: 2rem;
+           border: 2px solid #FDE68A;
+           box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+       }
+
+       .step-number {
+           position: absolute;
+           top: -20px;
+           left: 2rem;
+           width: 60px;
+           height: 60px;
+           background: linear-gradient(135deg, var(--amber), #F97316);
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           color: white;
+           font-size: 1.5rem;
+           font-weight: bold;
+           box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+       }
+   </style>
+</head>
+<body class="text-gray-800 leading-relaxed">
+   <a href="#main-content" class="skip-link">Skip to main content</a>
+   <div class="progress-bar" id="progressBar"></div>
+
+   <!-- Header -->
+   <!-- HEADER - Single Line Navigation -->
+   <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+       <div class="glass-morphism">
+           <div class="container mx-auto px-6 py-4">
+               <div class="flex justify-between items-center">
+                   <!-- Logo -->
+                   <a href="index.html" class="flex items-center space-x-2">
+                       <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">☕</div>
+                       <h1 class="text-3xl font-display font-bold gradient-text">Brewtopia</h1>
+                   </a>
+
+                   <!-- Desktop Navigation - Single Line -->
+                   <nav class="hidden xl:flex items-center space-x-6" aria-label="Main navigation">
+                       <a href="index.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Home
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="story.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Our Story
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="locator.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Find Store
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="gallery.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Gallery
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="shop.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Shop
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="careers.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Careers
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="barista.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Be a Barista
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="franchise.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Franchise
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="contact.html" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold shadow-lg">
+                           Apply Now
+                       </a>
+                   </nav>
+
+                   <!-- Mobile Menu Button -->
+                   <button class="xl:hidden text-gray-700" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">
+                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                       </svg>
+                   </button>
+               </div>
+           </div>
+       </div>
+
+       <!-- Mobile Menu -->
+       <div class="mobile-menu" id="mobileMenu">
+           <a href="index.html" class="text-gray-900 font-semibold">Home</a>
+           <a href="story.html" class="text-gray-700 hover:text-amber-600">Our Story</a>
+           <a href="locator.html" class="text-gray-700 hover:text-amber-600">Find Store</a>
+           <a href="gallery.html" class="text-gray-700 hover:text-amber-600">Gallery</a>
+           <a href="shop.html" class="text-gray-700 hover:text-amber-600">Shop</a>
+           <a href="careers.html" class="text-gray-700 hover:text-amber-600">Careers</a>
+           <a href="barista.html" class="text-gray-700 hover:text-amber-600">Be a Barista</a>
+           <a href="franchise.html" class="text-gray-700 hover:text-amber-600">Franchise</a>
+           <a href="contact.html" class="text-amber-600 font-semibold">Apply Now</a>
+       </div>
+   </header>
+
+   <main id="main-content">
+       <!-- Hero Section -->
+       <section class="pt-32 pb-20 px-6 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 relative overflow-hidden">
+           <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F59E0B" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+           
+           <div class="container mx-auto max-w-4xl relative z-10 text-center">
+               <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                   Your Path to Success
+               </div>
+               
+               <h2 class="text-5xl md:text-6xl font-display font-bold mb-6 gradient-text leading-tight">
+                   The Franchise Process
+               </h2>
+               
+               <p class="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                   From initial inquiry to grand opening, we guide you through every step of building your successful Brewtopia franchise.
+               </p>
+           </div>
+       </section>
+
+       <!-- Detailed 4-Step Process -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-6xl">
+               <div class="space-y-12">
+                   <!-- Step 1 -->
+                   <div class="step-card">
+                       <div class="step-number">1</div>
+                       <div class="pt-8">
+                           <h3 class="text-3xl font-display font-bold text-gray-900 mb-4">Initial Inquiry & Application</h3>
+                           <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                               Begin your journey by submitting an online application. Our franchise development team will review your qualifications and schedule an initial consultation to discuss the opportunity, answer your questions, and ensure mutual fit.
+                           </p>
+                           <div class="grid md:grid-cols-2 gap-6">
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">Timeline</h4>
+                                   <p class="text-gray-700">1-2 weeks</p>
+                               </div>
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">What to Expect</h4>
+                                   <ul class="text-gray-700 space-y-2">
+                                       <li>• Initial phone consultation</li>
+                                       <li>• Preliminary financial review</li>
+                                       <li>• Introduction to franchise team</li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Step 2 -->
+                   <div class="step-card">
+                       <div class="step-number">2</div>
+                       <div class="pt-8">
+                           <h3 class="text-3xl font-display font-bold text-gray-900 mb-4">Discovery & Due Diligence</h3>
+                           <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                               Dive deep into the Brewtopia opportunity. Review our Franchise Disclosure Document (FDD), meet key team members, visit existing locations, and speak with current franchise partners. We encourage thorough due diligence to ensure you're making an informed decision.
+                           </p>
+                           <div class="grid md:grid-cols-2 gap-6">
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">Timeline</h4>
+                                   <p class="text-gray-700">4-8 weeks</p>
+                               </div>
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">What to Expect</h4>
+                                   <ul class="text-gray-700 space-y-2">
+                                       <li>• Receive and review FDD</li>
+                                       <li>• Discovery Day at headquarters</li>
+                                       <li>• Location visits and partner calls</li>
+                                       <li>• Financial qualification process</li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Step 3 -->
+                   <div class="step-card">
+                       <div class="step-number">3</div>
+                       <div class="pt-8">
+                           <h3 class="text-3xl font-display font-bold text-gray-900 mb-4">Training & Site Development</h3>
+                           <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                               Once approved, complete our comprehensive 3-week training program covering operations, customer service, marketing, and financial management. Simultaneously, work with our real estate team on site selection, lease negotiation, and store design. Our construction team ensures your space meets Brewtopia standards.
+                           </p>
+                           <div class="grid md:grid-cols-2 gap-6">
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">Timeline</h4>
+                                   <p class="text-gray-700">4-6 months</p>
+                               </div>
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">What to Expect</h4>
+                                   <ul class="text-gray-700 space-y-2">
+                                       <li>• 3-week training program</li>
+                                       <li>• Site selection assistance</li>
+                                       <li>• Store design and buildout</li>
+                                       <li>• Equipment installation</li>
+                                       <li>• Staff recruitment support</li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Step 4 -->
+                   <div class="step-card">
+                       <div class="step-number">4</div>
+                       <div class="pt-8">
+                           <h3 class="text-3xl font-display font-bold text-gray-900 mb-4">Grand Opening & Ongoing Support</h3>
+                           <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                               Launch your Brewtopia with a comprehensive marketing campaign and on-site support from our opening team. After your successful opening, benefit from continuous operational support, marketing resources, and a network of fellow franchise partners. We're with you every step of the way.
+                           </p>
+                           <div class="grid md:grid-cols-2 gap-6">
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">Timeline</h4>
+                                   <p class="text-gray-700">Ongoing partnership</p>
+                               </div>
+                               <div class="bg-amber-50 p-6 rounded-xl">
+                                   <h4 class="font-bold text-gray-900 mb-3">What to Expect</h4>
+                                   <ul class="text-gray-700 space-y-2">
+                                       <li>• Grand opening marketing</li>
+                                       <li>• On-site launch support (1 week)</li>
+                                       <li>• Quarterly business reviews</li>
+                                       <li>• 24/7 operational support</li>
+                                       <li>• Annual conference and training</li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Timeline Expectation - IMPROVEMENT #18 -->
+               <div class="mt-16 bg-gradient-to-br from-gray-900 to-amber-900 text-white rounded-3xl p-8 md:p-12 text-center">
+                   <h3 class="text-3xl font-display font-bold mb-6">Total Timeline to Opening</h3>
+                   <div class="text-6xl font-bold text-amber-400 mb-4">6-9 Months</div>
+                   <p class="text-xl text-gray-300 mb-6">From application acceptance to grand opening day</p>
+                   <p class="text-gray-300 max-w-2xl mx-auto">
+                       After you submit your application, we'll contact you within 48 hours to schedule your initial consultation. The entire process typically takes 6-9 months, though timeline can vary based on site selection and construction.
+                   </p>
+               </div>
+           </div>
+       </section>
+
+       <!-- Requirements Section -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+           <div class="container mx-auto max-w-6xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+                       Franchise Requirements
+                   </h3>
+                   <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+                       We seek partners who share our values and have the resources to build a successful business.
+                   </p>
+               </div>
+
+               <div class="grid md:grid-cols-2 gap-8">
+                   <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-amber-100">
+                       <h4 class="text-2xl font-bold text-gray-900 mb-4">Financial Requirements</h4>
+                       <ul class="space-y-4 text-gray-700">
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span><span class="font-semibold">Minimum Net Worth:</span> $500,000</span>
+                           </li>
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span><span class="font-semibold">Liquid Capital:</span> $150,000 minimum</span>
+                           </li>
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span><span class="font-semibold">Total Investment:</span> $250,000 - $500,000</span>
+                           </li>
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span><span class="font-semibold">Franchise Fee:</span> $45,000</span>
+                           </li>
+                       </ul>
+                   </div>
+
+                   <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-amber-100">
+                       <h4 class="text-2xl font-bold text-gray-900 mb-4">Experience & Commitment</h4>
+                       <ul class="space-y-4 text-gray-700">
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span>Business or management experience preferred</span>
+                           </li>
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span>Passion for coffee and customer service</span>
+                           </li>
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span>Commitment to hands-on management</span>
+                           </li>
+                           <li class="flex items-start">
+                               <span class="text-amber-600 mr-3 text-xl font-bold">•</span>
+                               <span>Align with Brewtopia values and culture</span>
+                           </li>
+                       </ul>
+                   </div>
+               </div>
+
+               <!-- Cost Breakdown -->
+               <div class="mt-12 bg-white p-8 rounded-2xl shadow-lg border-2 border-amber-100">
+                   <h4 class="text-2xl font-bold text-gray-900 mb-6 text-center">Investment Breakdown</h4>
+                   <div class="grid md:grid-cols-3 gap-6">
+                       <div class="text-center p-4 bg-amber-50 rounded-xl">
+                           <div class="text-3xl font-bold text-amber-600 mb-2">$45K</div>
+                           <div class="text-sm text-gray-700 font-semibold">Franchise Fee</div>
+                       </div>
+                       <div class="text-center p-4 bg-amber-50 rounded-xl">
+                           <div class="text-3xl font-bold text-amber-600 mb-2">$150K-$350K</div>
+                           <div class="text-sm text-gray-700 font-semibold">Buildout & Equipment</div>
+                       </div>
+                       <div class="text-center p-4 bg-amber-50 rounded-xl">
+                           <div class="text-3xl font-bold text-amber-600 mb-2">$55K-$105K</div>
+                           <div class="text-sm text-gray-700 font-semibold">Inventory & Working Capital</div>
+                       </div>
+                   </div>
+                   <div class="mt-6 text-center">
+                       <p class="text-sm text-gray-600 italic">
+                           Ongoing Fees: 6% royalty + 2% marketing fund
+                       </p>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- FAQ Section - IMPROVEMENT #17 -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-4xl">
+               <div class="text-center mb-16">
+                   <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                       Have Questions?
+                   </div>
+                   <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+                       Frequently Asked Questions
+                   </h3>
+               </div>
+
+               <div class="space-y-4">
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">How much does it cost to open a Brewtopia franchise?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               The total investment ranges from $250,000 to $500,000, which includes a $45,000 franchise fee, buildout costs, equipment, initial inventory, and working capital. The exact amount depends on location size, real estate costs, and market conditions.
+                           </p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">Are territories protected?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               Yes. Each franchise receives a protected territory based on population density and market analysis. We typically grant territories with 25,000-40,000 residents, ensuring adequate customer base without oversaturation.
+                           </p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">What ongoing support do you provide?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               We provide comprehensive ongoing support including: 24/7 operational assistance, quarterly business reviews, marketing materials and campaigns, supply chain management, technology updates, annual training conferences, and access to our franchise partner network.
+                           </p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">How long until I can expect to be profitable?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               Most franchise partners reach positive cash flow within 18-24 months. However, this varies based on location, market conditions, and operational execution. Our established locations average $450,000 in annual revenue by year three.
+                           </p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">Do I need prior coffee or restaurant experience?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               No prior coffee or restaurant experience is required. We prefer business or management experience and a passion for customer service. Our comprehensive 3-week training program covers all aspects of running a successful Brewtopia location.
+                           </p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">Can I own multiple locations?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               Absolutely! Many of our most successful partners operate multiple locations. We encourage multi-unit development for qualified franchisees and offer incentives for those committed to opening additional stores.
+                           </p>
+                       </div>
+                   </div>
+
+                   <div class="faq-item">
+                       <button class="faq-question text-left" aria-expanded="false">
+                           <span class="text-lg font-semibold text-gray-900 pr-8">What markets are currently available?</span>
+                           <svg class="faq-icon w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="faq-answer">
+                           <p class="text-gray-700 pb-6 leading-relaxed">
+                               We're actively seeking partners in suburban and small-city markets across the United States and Canada. Contact our franchise development team to discuss specific territory availability in your desired location.
+                           </p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- CTA Section -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white">
+           <div class="container mx-auto max-w-4xl text-center">
+               <h3 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                   Ready to Take the First Step?
+               </h3>
+               
+               <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                   Submit your application today and we'll contact you within 48 hours to begin your journey.
+               </p>
+               
+               <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                   <a href="contact.html" class="inline-flex items-center px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105">
+                       <span class="mr-2">Apply Now</span>
+                       <span>→</span>
+                   </a>
+                   <a href="story.html" class="inline-flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                       <span>Learn Our Story</span>
+                   </a>
+               </div>
+           </div>
+       </section>
+   </main>
+
+<!-- FOOTER -->
+   <footer class="bg-gray-900 text-gray-300 py-16">
+       <div class="container mx-auto px-6">
+           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+               <!-- Brand Column -->
+               <div class="lg:col-span-2">
+                   <div class="flex items-center space-x-2 mb-4">
+                       <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">☕</div>
+                       <h4 class="text-2xl font-display font-bold text-white">Brewtopia</h4>
+                   </div>
+                   <p class="text-gray-400 mb-6 max-w-md">
+                       Building communities one cup at a time. Join our franchise family or find your perfect role in our growing team.
+                   </p>
+                   <div class="flex space-x-4 mb-6">
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Facebook">
+                           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                       </a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Instagram">
+                           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                       </a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Twitter">
+                           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                       </a>
+                   </div>
+                   <div class="text-sm text-gray-400">
+                       <p>Email: <a href="mailto:info@brewtopia.com" class="hover:text-amber-400">info@brewtopia.com</a></p>
+                       <p>Phone: <a href="tel:1-800-BREWTOPIA" class="hover:text-amber-400">1-800-BREWTOPIA</a></p>
+                   </div>
+               </div>
+
+               <!-- Company -->
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Company</h5>
+                   <ul class="space-y-2">
+                       <li><a href="index.html" class="hover:text-amber-400 transition-colors">Home</a></li>
+                       <li><a href="story.html" class="hover:text-amber-400 transition-colors">Our Story</a></li>
+                       <li><a href="gallery.html" class="hover:text-amber-400 transition-colors">Gallery</a></li>
+                       <li><a href="shop.html" class="hover:text-amber-400 transition-colors">Shop</a></li>
+                   </ul>
+               </div>
+
+               <!-- Franchise -->
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Franchise</h5>
+                   <ul class="space-y-2">
+                       <li><a href="franchise.html" class="hover:text-amber-400 transition-colors">Franchise Process</a></li>
+                       <li><a href="contact.html" class="hover:text-amber-400 transition-colors">Apply Now</a></li>
+                       <li><a href="locator.html" class="hover:text-amber-400 transition-colors">Find a Store</a></li>
+                   </ul>
+               </div>
+
+               <!-- Careers -->
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Join Our Team</h5>
+                   <ul class="space-y-2">
+                       <li><a href="careers.html" class="hover:text-amber-400 transition-colors">All Positions</a></li>
+                       <li><a href="barista.html" class="hover:text-amber-400 transition-colors">Be a Barista</a></li>
+                   </ul>
+               </div>
+           </div>
+
+           <!-- Bottom Bar -->
+           <div class="border-t border-gray-800 mt-12 pt-8">
+               <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                   <p class="text-sm text-center md:text-left">
+                       &copy; 2024 Brewtopia. All rights reserved.
+                   </p>
+                   <div class="flex flex-wrap gap-6 text-sm">
+                       <a href="#" class="hover:text-amber-400 transition-colors">Privacy Policy</a>
+                       <a href="#" class="hover:text-amber-400 transition-colors">Terms of Service</a>
+                       <a href="#" class="hover:text-amber-400 transition-colors">Accessibility</a>
+                       <a href="#" class="hover:text-amber-400 transition-colors">Sitemap</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </footer>
+
+   <script>
+       function updateProgressBar() {
+           const scrollTop = window.scrollY;
+           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+           const scrollPercent = (scrollTop / docHeight) * 100;
+           document.getElementById('progressBar').style.width = scrollPercent + '%';
+       }
+       
+       window.addEventListener('scroll', updateProgressBar);
+
+       window.addEventListener('scroll', function() {
+           const navbar = document.getElementById('navbar');
+           if (window.scrollY > 50) {
+               navbar.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+           } else {
+               navbar.style.boxShadow = 'none';
+           }
+       });
+
+       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+       const mobileMenu = document.getElementById('mobileMenu');
+       
+       if (mobileMenuBtn && mobileMenu) {
+           mobileMenuBtn.addEventListener('click', function() {
+               const isExpanded = this.getAttribute('aria-expanded') === 'true';
+               this.setAttribute('aria-expanded', !isExpanded);
+               mobileMenu.classList.toggle('active');
+           });
+
+           document.addEventListener('click', function(event) {
+               if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                   mobileMenu.classList.remove('active');
+                   mobileMenuBtn.setAttribute('aria-expanded', 'false');
+               }
+           });
+       }
+
+       // FAQ Accordion functionality
+       document.querySelectorAll('.faq-question').forEach(button => {
+           button.addEventListener('click', function() {
+               const answer = this.nextElementSibling;
+               const icon = this.querySelector('.faq-icon');
+               const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+               // Close all other FAQs
+               document.querySelectorAll('.faq-answer').forEach(otherAnswer => {
+                   if (otherAnswer !== answer) {
+                       otherAnswer.classList.remove('active');
+                   }
+               });
+               document.querySelectorAll('.faq-icon').forEach(otherIcon => {
+                   if (otherIcon !== icon) {
+                       otherIcon.classList.remove('active');
+                   }
+               });
+               document.querySelectorAll('.faq-question').forEach(otherButton => {
+                   if (otherButton !== this) {
+                       otherButton.setAttribute('aria-expanded', 'false');
+                   }
+               });
+
+               // Toggle current FAQ
+               answer.classList.toggle('active');
+               icon.classList.toggle('active');
+               this.setAttribute('aria-expanded', !isExpanded);
+           });
+       });
+   </script>
+</body>
+</html>

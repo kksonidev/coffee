@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Become a Barista - Brewtopia Careers</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+   <style>
+       :root {
+           --coffee-dark: #2C1810;
+           --coffee-medium: #4A2C17;
+           --coffee-light: #8B4513;
+           --cream: #F5F1EB;
+           --gold: #D4A574;
+           --amber: #F59E0B;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+       body {
+           font-family: 'Inter', sans-serif;
+           background: linear-gradient(135deg, var(--cream) 0%, #F0EBE3 100%);
+       }
+
+       .font-display {
+           font-family: 'Playfair Display', serif;
+       }
+
+       .gradient-text {
+           background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--gold) 100%);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
+       }
+
+       .glass-morphism {
+           background: rgba(255, 255, 255, 0.95);
+           backdrop-filter: blur(20px);
+           border: 1px solid rgba(255, 255, 255, 0.2);
+       }
+
+       .progress-bar {
+           height: 4px;
+           background: linear-gradient(90deg, var(--amber) 0%, var(--gold) 100%);
+           position: fixed;
+           top: 0;
+           left: 0;
+           z-index: 9999;
+           transition: width 0.3s ease;
+       }
+
+       .skip-link {
+           position: absolute;
+           top: -40px;
+           left: 0;
+           background: var(--amber);
+           color: white;
+           padding: 8px 16px;
+           text-decoration: none;
+           z-index: 10000;
+       }
+
+       .skip-link:focus {
+           top: 0;
+       }
+
+       a:focus-visible,
+       button:focus-visible {
+           outline: 3px solid var(--amber);
+           outline-offset: 2px;
+       }
+
+       .mobile-menu {
+           display: none;
+           position: fixed;
+           top: 72px;
+           left: 0;
+           right: 0;
+           background: rgba(255, 255, 255, 0.98);
+           backdrop-filter: blur(20px);
+           padding: 1.5rem;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+           z-index: 40;
+       }
+
+       .mobile-menu.active {
+           display: block;
+       }
+
+       .mobile-menu a {
+           display: block;
+           padding: 1rem 0;
+           border-bottom: 1px solid rgba(0,0,0,0.1);
+       }
+
+       @media (prefers-reduced-motion: reduce) {
+           *,
+           *::before,
+           *::after {
+               animation-duration: 0.01ms !important;
+               animation-iteration-count: 1 !important;
+               transition-duration: 0.01ms !important;
+           }
+       }
+
+       .timeline-item {
+           position: relative;
+           padding-left: 3rem;
+           padding-bottom: 2rem;
+       }
+
+       .timeline-item::before {
+           content: '';
+           position: absolute;
+           left: 0.5rem;
+           top: 0;
+           bottom: 0;
+           width: 2px;
+           background: linear-gradient(180deg, var(--amber), var(--gold));
+       }
+
+       .timeline-item:last-child::before {
+           display: none;
+       }
+
+       .timeline-dot {
+           position: absolute;
+           left: 0;
+           top: 0.25rem;
+           width: 1.5rem;
+           height: 1.5rem;
+           background: var(--amber);
+           border: 4px solid white;
+           border-radius: 50%;
+           box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+       }
+
+       .skill-card {
+           transition: all 0.3s ease;
+       }
+
+       .skill-card:hover {
+           transform: translateY(-4px);
+           box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+       }
+
+       .accordion-button {
+           cursor: pointer;
+           transition: all 0.3s;
+       }
+
+       .accordion-content {
+           max-height: 0;
+           overflow: hidden;
+           transition: max-height 0.3s ease-out;
+       }
+
+       .accordion-content.active {
+           max-height: 500px;
+       }
+
+       .video-placeholder {
+           aspect-ratio: 16/9;
+           background: linear-gradient(135deg, #4A2C17, #8B4513);
+           border-radius: 1rem;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           position: relative;
+           overflow: hidden;
+       }
+
+       .play-button {
+           width: 80px;
+           height: 80px;
+           background: rgba(255, 255, 255, 0.9);
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           cursor: pointer;
+           transition: all 0.3s;
+       }
+
+       .play-button:hover {
+           transform: scale(1.1);
+           background: white;
+       }
+   </style>
+</head>
+<body class="text-gray-800 leading-relaxed">
+   <a href="#main-content" class="skip-link">Skip to main content</a>
+   <div class="progress-bar" id="progressBar"></div>
+
+   <!-- HEADER - Single Line Navigation -->
+   <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+       <div class="glass-morphism">
+           <div class="container mx-auto px-6 py-4">
+               <div class="flex justify-between items-center">
+                   <!-- Logo -->
+                   <a href="index.html" class="flex items-center space-x-2">
+                       <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl">☕</div>
+                       <h1 class="text-3xl font-display font-bold gradient-text">Brewtopia</h1>
+                   </a>
+
+                   <!-- Desktop Navigation - Single Line -->
+                   <nav class="hidden xl:flex items-center space-x-6" aria-label="Main navigation">
+                       <a href="index.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Home
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="story.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Our Story
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="locator.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Find Store
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="gallery.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Gallery
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="shop.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Shop
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="careers.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Careers
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="barista.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Be a Barista
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="franchise.html" class="text-gray-700 hover:text-amber-600 transition-colors duration-300 font-medium relative group">
+                           Franchise
+                           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                       </a>
+
+                       <a href="contact.html" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full hover:from-amber-600 hover:to-orange-700 transition-all duration-300 font-semibold shadow-lg">
+                           Apply Now
+                       </a>
+                   </nav>
+
+                   <!-- Mobile Menu Button -->
+                   <button class="xl:hidden text-gray-700" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">
+                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                       </svg>
+                   </button>
+               </div>
+           </div>
+       </div>
+
+       <!-- Mobile Menu -->
+       <div class="mobile-menu" id="mobileMenu">
+           <a href="index.html" class="text-gray-900 font-semibold">Home</a>
+           <a href="story.html" class="text-gray-700 hover:text-amber-600">Our Story</a>
+           <a href="locator.html" class="text-gray-700 hover:text-amber-600">Find Store</a>
+           <a href="gallery.html" class="text-gray-700 hover:text-amber-600">Gallery</a>
+           <a href="shop.html" class="text-gray-700 hover:text-amber-600">Shop</a>
+           <a href="careers.html" class="text-gray-700 hover:text-amber-600">Careers</a>
+           <a href="barista.html" class="text-gray-700 hover:text-amber-600">Be a Barista</a>
+           <a href="franchise.html" class="text-gray-700 hover:text-amber-600">Franchise</a>
+           <a href="contact.html" class="text-amber-600 font-semibold">Apply Now</a>
+       </div>
+   </header>
+
+   <main id="main-content">
+       <!-- Hero Section -->
+       <section class="pt-32 pb-20 px-6 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 relative overflow-hidden">
+           <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F59E0B" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+           
+           <div class="container mx-auto max-w-6xl relative z-10">
+               <div class="grid lg:grid-cols-2 gap-12 items-center">
+                   <div>
+                       <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                           No Experience Required
+                       </div>
+                       
+                       <h2 class="text-5xl md:text-6xl font-display font-bold mb-6 gradient-text leading-tight">
+                           Become a Brewtopia Barista
+                       </h2>
+                       
+                       <p class="text-xl text-gray-700 leading-relaxed mb-8">
+                           Start your journey in the coffee industry. We'll train you to craft exceptional drinks, provide amazing service, and build a rewarding career.
+                       </p>
+
+                       <div class="flex flex-wrap gap-4 mb-8">
+                           <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
+                               <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                               </svg>
+                               <span class="font-semibold text-gray-900">$15-18/hour + Tips</span>
+                           </div>
+                           <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
+                               <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                               </svg>
+                               <span class="font-semibold text-gray-900">Full Benefits</span>
+                           </div>
+                           <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
+                               <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                               </svg>
+                               <span class="font-semibold text-gray-900">Flexible Schedule</span>
+                           </div>
+                       </div>
+                      
+                       <div class="flex flex-col sm:flex-row gap-4">
+                           <a href="#apply" class="px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 text-center">
+                               Apply Now
+                           </a>
+                           <a href="#training" class="px-10 py-4 border-2 border-amber-500 text-amber-600 font-bold text-lg rounded-full hover:bg-amber-500 hover:text-white transition-all duration-300 transform hover:scale-105 text-center">
+                               Learn More
+                           </a>
+                       </div>
+                   </div>
+
+                   <div class="video-placeholder">
+                       <div class="play-button">
+                           <svg class="w-8 h-8 text-amber-600 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                               <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path>
+                           </svg>
+                       </div>
+                       <div class="absolute bottom-4 left-4 text-white">
+                           <p class="font-semibold">Watch: A Day in the Life</p>
+                           <p class="text-sm text-gray-200">See what it's like to be a Brewtopia barista</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Why Be a Barista -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-6xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl font-display font-bold text-gray-900 mb-6">
+                       Why Choose Barista Life?
+                   </h3>
+                   <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                       More than just making coffee—it's about creating experiences and building community.
+                   </p>
+               </div>
+
+               <div class="grid md:grid-cols-3 gap-8">
+                   <div class="text-center p-8 bg-amber-50 rounded-2xl border-2 border-amber-100">
+                       <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl">
+                           🎨
+                       </div>
+                       <h4 class="text-xl font-bold text-gray-900 mb-3">Creative Expression</h4>
+                       <p class="text-gray-700">Master latte art, experiment with flavors, and express your creativity in every cup you craft.</p>
+                   </div>
+
+                   <div class="text-center p-8 bg-amber-50 rounded-2xl border-2 border-amber-100">
+                       <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl">
+                           👥
+                       </div>
+                       <h4 class="text-xl font-bold text-gray-900 mb-3">Community Connection</h4>
+                       <p class="text-gray-700">Build genuine relationships with regulars and be at the heart of your local community.</p>
+                   </div>
+
+                   <div class="text-center p-8 bg-amber-50 rounded-2xl border-2 border-amber-100">
+                       <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl">
+                           📈
+                       </div>
+                       <h4 class="text-xl font-bold text-gray-900 mb-3">Career Growth</h4>
+                       <p class="text-gray-700">Clear path from barista to shift supervisor to store manager and beyond.</p>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Training Program -->
+       <section id="training" class="py-20 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+           <div class="container mx-auto max-w-6xl">
+               <div class="text-center mb-16">
+                   <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6">
+                       Comprehensive Training
+                   </div>
+                   <h3 class="text-4xl font-display font-bold text-gray-900 mb-6">
+                       We'll Teach You Everything
+                   </h3>
+                   <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                       Our 2-week training program covers coffee knowledge, technical skills, and customer service excellence.
+                   </p>
+               </div>
+
+               <div class="grid md:grid-cols-2 gap-12 mb-12">
+                   <div>
+                       <h4 class="text-2xl font-bold text-gray-900 mb-6">What You'll Learn</h4>
+                       <div class="space-y-4">
+                           <div class="timeline-item">
+                               <div class="timeline-dot"></div>
+                               <h5 class="font-bold text-gray-900 mb-2">Coffee Fundamentals</h5>
+                               <p class="text-gray-700 text-sm">Bean origins, roasting profiles, brewing methods, and flavor notes</p>
+                           </div>
+
+                           <div class="timeline-item">
+                               <div class="timeline-dot"></div>
+                               <h5 class="font-bold text-gray-900 mb-2">Espresso Mastery</h5>
+                               <p class="text-gray-700 text-sm">Pulling perfect shots, milk steaming, and latte art techniques</p>
+                           </div>
+
+                           <div class="timeline-item">
+                               <div class="timeline-dot"></div>
+                               <h5 class="font-bold text-gray-900 mb-2">Customer Service</h5>
+                               <p class="text-gray-700 text-sm">Creating memorable experiences and handling special requests</p>
+                           </div>
+
+                           <div class="timeline-item">
+                               <div class="timeline-dot"></div>
+                               <h5 class="font-bold text-gray-900 mb-2">Operations & Safety</h5>
+                               <p class="text-gray-700 text-sm">Equipment maintenance, food safety, and store procedures</p>
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="bg-white rounded-2xl p-8 shadow-lg border-2 border-amber-100">
+                       <h4 class="text-2xl font-bold text-gray-900 mb-6">Training Schedule</h4>
+                       <div class="space-y-4">
+                           <div class="flex items-start gap-4">
+                               <div class="w-12 h-12 flex-shrink-0 bg-amber-100 rounded-lg flex items-center justify-center font-bold text-amber-600">
+                                   W1
+                               </div>
+                               <div>
+                                   <h5 class="font-bold text-gray-900">Week 1: Foundations</h5>
+                                   <p class="text-sm text-gray-700">Coffee basics, equipment training, and espresso fundamentals</p>
+                               </div>
+                           </div>
+
+                           <div class="flex items-start gap-4">
+                               <div class="w-12 h-12 flex-shrink-0 bg-amber-100 rounded-lg flex items-center justify-center font-bold text-amber-600">
+                                   W2
+                               </div>
+                               <div>
+                                   <h5 class="font-bold text-gray-900">Week 2: Advanced Skills</h5>
+                                   <p class="text-sm text-gray-700">Latte art, specialty drinks, and customer service scenarios</p>
+                               </div>
+                           </div>
+
+                           <div class="flex items-start gap-4">
+                               <div class="w-12 h-12 flex-shrink-0 bg-green-100 rounded-lg flex items-center justify-center font-bold text-green-600">
+                                   ✓
+                               </div>
+                               <div>
+                                   <h5 class="font-bold text-gray-900">Ongoing Support</h5>
+                                   <p class="text-sm text-gray-700">Monthly workshops, skill assessments, and advanced certifications</p>
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="mt-6 p-4 bg-amber-50 rounded-lg">
+                           <p class="text-sm text-gray-700 font-semibold">You'll be paid your full hourly rate during all training!</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Skills You'll Gain -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-6xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl font-display font-bold text-gray-900 mb-6">
+                       Skills That Matter
+                   </h3>
+                   <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                       Transferable skills that will benefit you throughout your career, wherever it takes you.
+                   </p>
+               </div>
+
+               <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">💬</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Communication</h4>
+                       <p class="text-sm text-gray-700">Clear verbal skills and active listening</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">⏰</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Time Management</h4>
+                       <p class="text-sm text-gray-700">Multi-tasking during busy rushes</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">🤝</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Teamwork</h4>
+                       <p class="text-sm text-gray-700">Collaborating in fast-paced environment</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">🎯</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Attention to Detail</h4>
+                       <p class="text-sm text-gray-700">Precision in every drink you make</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">😊</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Customer Service</h4>
+                       <p class="text-sm text-gray-700">Creating positive experiences</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">🧠</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Problem Solving</h4>
+                       <p class="text-sm text-gray-700">Thinking quickly under pressure</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">📊</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Sales Skills</h4>
+                       <p class="text-sm text-gray-700">Product knowledge and upselling</p>
+                   </div>
+
+                   <div class="skill-card bg-amber-50 p-6 rounded-xl border-2 border-amber-100">
+                       <div class="text-3xl mb-3">🏆</div>
+                       <h4 class="font-bold text-gray-900 mb-2">Leadership</h4>
+                       <p class="text-sm text-gray-700">Mentoring new team members</p>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Day in the Life -->
+       <section class="py-20 px-6 bg-gradient-to-br from-gray-50 to-amber-50">
+           <div class="container mx-auto max-w-5xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl font-display font-bold text-gray-900 mb-6">
+                       A Day in Your Life
+                   </h3>
+                   <p class="text-lg text-gray-700">
+                       Every day is different, but here's what a typical shift might look like
+                   </p>
+               </div>
+
+               <div class="bg-white rounded-2xl p-8 shadow-lg border-2 border-amber-100">
+                   <div class="space-y-6">
+                       <div class="flex gap-4">
+                           <div class="text-amber-600 font-bold text-lg w-24 flex-shrink-0">7:00 AM</div>
+                           <div>
+                               <h4 class="font-bold text-gray-900 mb-1">Opening Prep</h4>
+                               <p class="text-gray-700">Grind fresh beans, set up espresso machines, stock pastries. Morning playlist sets the vibe.</p>
+                           </div>
+                       </div>
+
+                       <div class="flex gap-4">
+                           <div class="text-amber-600 font-bold text-lg w-24 flex-shrink-0">8:00 AM</div>
+                           <div>
+                               <h4 class="font-bold text-gray-900 mb-1">Morning Rush</h4>
+                               <p class="text-gray-700">The café fills up! You're steaming milk, pulling shots, greeting regulars by name, and keeping the energy high.</p>
+                           </div>
+                       </div>
+
+                       <div class="flex gap-4">
+                           <div class="text-amber-600 font-bold text-lg w-24 flex-shrink-0">10:30 AM</div>
+                           <div>
+                               <h4 class="font-bold text-gray-900 mb-1">Mid-Morning Break</h4>
+                               <p class="text-gray-700">30-minute paid break. Enjoy a free drink and maybe try that new pastry recipe.</p>
+                           </div>
+                       </div>
+
+                       <div class="flex gap-4">
+                           <div class="text-amber-600 font-bold text-lg w-24 flex-shrink-0">11:00 AM</div>
+                           <div>
+                               <h4 class="font-bold text-gray-900 mb-1">Creative Time</h4>
+                               <p class="text-gray-700">Practice latte art, help train a new barista, or experiment with a new seasonal drink idea.</p>
+                           </div>
+                       </div>
+
+                       <div class="flex gap-4">
+                           <div class="text-amber-600 font-bold text-lg w-24 flex-shrink-0">12:00 PM</div>
+                           <div>
+                               <h4 class="font-bold text-gray-900 mb-1">Lunch Service</h4>
+                               <p class="text-gray-700">Different crowd, different drinks. More cold brews and iced lattes as the day warms up.</p>
+                           </div>
+                       </div>
+
+                       <div class="flex gap-4">
+                           <div class="text-amber-600 font-bold text-lg w-24 flex-shrink-0">3:00 PM</div>
+                           <div>
+                               <h4 class="font-bold text-gray-900 mb-1">Afternoon Shift Change</h4>
+                               <p class="text-gray-700">Hand off to evening crew or stay for closing. Clean equipment, restock supplies, prep for tomorrow.</p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- FAQ Section -->
+       <section class="py-20 px-6 bg-white">
+           <div class="container mx-auto max-w-4xl">
+               <div class="text-center mb-16">
+                   <h3 class="text-4xl font-display font-bold text-gray-900 mb-6">
+                       Common Questions
+                   </h3>
+               </div>
+
+               <div class="space-y-4">
+                   <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                       <button class="accordion-button w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                           <span class="font-bold text-gray-900">Do I need experience?</span>
+                           <svg class="w-5 h-5 text-amber-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="accordion-content">
+                           <div class="px-6 pb-6 text-gray-700">
+                               No experience required! We provide comprehensive training for everyone. Whether you've never made a latte or you're a coffee enthusiast, we'll teach you everything you need to know.
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                       <button class="accordion-button w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                           <span class="font-bold text-gray-900">What are the hours like?</span>
+                           <svg class="w-5 h-5 text-amber-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="accordion-content">
+                           <div class="px-6 pb-6 text-gray-700">
+                               We offer flexible scheduling for both full-time and part-time positions. Shifts typically range from opening (6 AM) to closing (8 PM). We work with students, parents, and anyone needing schedule flexibility.
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                       <button class="accordion-button w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                           <span class="font-bold text-gray-900">How much can I earn?</span>
+                           <svg class="w-5 h-5 text-amber-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="accordion-content">
+                           <div class="px-6 pb-6 text-gray-700">
+                               Starting pay is $15-18/hour depending on location and experience, plus tips which typically add $3-5/hour. Full-time baristas also receive health insurance, 401(k) matching, and paid time off.
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                       <button class="accordion-button w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                           <span class="font-bold text-gray-900">Can I advance my career?</span>
+                           <svg class="w-5 h-5 text-amber-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="accordion-content">
+                           <div class="px-6 pb-6 text-gray-700">
+                               Absolutely! Many of our store managers started as baristas. The typical path is: Barista → Shift Supervisor → Assistant Manager → Store Manager. We promote from within whenever possible.
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                       <button class="accordion-button w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                           <span class="font-bold text-gray-900">What if I'm still in school?</span>
+                           <svg class="w-5 h-5 text-amber-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                           </svg>
+                       </button>
+                       <div class="accordion-content">
+                           <div class="px-6 pb-6 text-gray-700">
+                               We love hiring students! We offer flexible part-time schedules that work around classes. Plus, we provide tuition assistance of up to $5,000/year for eligible team members.
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Application Section -->
+       <section id="apply" class="py-20 px-6 bg-gradient-to-br from-gray-900 to-amber-900 text-white">
+           <div class="container mx-auto max-w-4xl text-center">
+               <h3 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                   Ready to Join Our Team?
+               </h3>
+               
+               <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                   Apply today and start your journey as a Brewtopia barista. We're hiring at locations nationwide.
+               </p>
+               
+               <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                   <a href="careers.html" class="inline-flex items-center px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105">
+                       <span class="mr-2">View Open Positions</span>
+                       <span>→</span>
+                   </a>
+                   <a href="locator.html" class="inline-flex items-center px-10 py-4 border-2 border-white text-white font-bold text-lg rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                       <span>Find Your Store</span>
+                   </a>
+               </div>
+
+               <div class="mt-12 pt-12 border-t border-white/20">
+                   <p class="text-gray-300 mb-4">Questions about the position?</p>
+                   <a href="mailto:careers@brewtopia.com" class="text-amber-400 font-semibold hover:text-amber-300">careers@brewtopia.com</a>
+                   <span class="text-gray-400 mx-4">|</span>
+                   <a href="tel:1-800-BREWTOPIA" class="text-amber-400 font-semibold hover:text-amber-300">1-800-BREWTOPIA</a>
+               </div>
+           </div>
+       </section>
+   </main>
+
+   <!-- FOOTER -->
+   <footer class="bg-gray-900 text-gray-300 py-16">
+       <div class="container mx-auto px-6">
+           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+               <!-- Brand Column -->
+               <div class="lg:col-span-2">
+                   <div class="flex items-center space-x-2 mb-4">
+                       <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">☕</div>
+                       <h4 class="text-2xl font-display font-bold text-white">Brewtopia</h4>
+                   </div>
+                   <p class="text-gray-400 mb-6 max-w-md">
+                       Building communities one cup at a time. Join our franchise family or find your perfect role in our growing team.
+                   </p>
+                   <div class="flex space-x-4 mb-6">
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Facebook">
+                           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                       </a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Instagram">
+                           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                       </a>
+                       <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors" aria-label="Twitter">
+                           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                       </a>
+                   </div>
+                   <div class="text-sm text-gray-400">
+                       <p>Email: <a href="mailto:info@brewtopia.com" class="hover:text-amber-400">info@brewtopia.com</a></p>
+                       <p>Phone: <a href="tel:1-800-BREWTOPIA" class="hover:text-amber-400">1-800-BREWTOPIA</a></p>
+                   </div>
+               </div>
+
+               <!-- Company -->
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Company</h5>
+                   <ul class="space-y-2">
+                       <li><a href="index.html" class="hover:text-amber-400 transition-colors">Home</a></li>
+                       <li><a href="story.html" class="hover:text-amber-400 transition-colors">Our Story</a></li>
+                       <li><a href="gallery.html" class="hover:text-amber-400 transition-colors">Gallery</a></li>
+                       <li><a href="shop.html" class="hover:text-amber-400 transition-colors">Shop</a></li>
+                   </ul>
+               </div>
+
+               <!-- Franchise -->
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Franchise</h5>
+                   <ul class="space-y-2">
+                       <li><a href="franchise.html" class="hover:text-amber-400 transition-colors">Franchise Process</a></li>
+                       <li><a href="contact.html" class="hover:text-amber-400 transition-colors">Apply Now</a></li>
+                       <li><a href="locator.html" class="hover:text-amber-400 transition-colors">Find a Store</a></li>
+                   </ul>
+               </div>
+
+               <!-- Careers -->
+               <div>
+                   <h5 class="text-white font-semibold mb-4">Join Our Team</h5>
+                   <ul class="space-y-2">
+                       <li><a href="careers.html" class="hover:text-amber-400 transition-colors">All Positions</a></li>
+                       <li><a href="barista.html" class="hover:text-amber-400 transition-colors">Be a Barista</a></li>
+                   </ul>
+               </div>
+           </div>
+
+           <!-- Bottom Bar -->
+           <div class="border-t border-gray-800 mt-12 pt-8">
+               <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                   <p class="text-sm text-center md:text-left">
+                       &copy; 2024 Brewtopia. All rights reserved.
+                   </p>
+                   <div class="flex flex-wrap gap-6 text-sm">
+                       <a href="#" class="hover:text-amber-400 transition-colors">Privacy Policy</a>
+                       <a href="#" class="hover:text-amber-400 transition-colors">Terms of Service</a>
+                       <a href="#" class="hover:text-amber-400 transition-colors">Accessibility</a>
+                       <a href="#" class="hover:text-amber-400 transition-colors">Sitemap</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </footer>
+
+   <script>
+       function updateProgressBar() {
+           const scrollTop = window.scrollY;
+           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+           const scrollPercent = (scrollTop / docHeight) * 100;
+           document.getElementById('progressBar').style.width = scrollPercent + '%';
+       }
+       
+       window.addEventListener('scroll', updateProgressBar);
+
+       window.addEventListener('scroll', function() {
+           const navbar = document.getElementById('navbar');
+           if (window.scrollY > 50) {
+               navbar.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+           } else {
+               navbar.style.boxShadow = 'none';
+           }
+       });
+
+       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+       const mobileMenu = document.getElementById('mobileMenu');
+       
+       if (mobileMenuBtn && mobileMenu) {
+           mobileMenuBtn.addEventListener('click', function() {
+               const isExpanded = this.getAttribute('aria-expanded') === 'true';
+               this.setAttribute('aria-expanded', !isExpanded);
+               mobileMenu.classList.toggle('active');
+           });
+
+           document.addEventListener('click', function(event) {
+               if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                   mobileMenu.classList.remove('active');
+                   mobileMenuBtn.setAttribute('aria-expanded', 'false');
+               }
+           });
+       }
+
+       // Accordion functionality
+       const accordionButtons = document.querySelectorAll('.accordion-button');
+       accordionButtons.forEach(button => {
+           button.addEventListener('click', function() {
+               const content = this.nextElementSibling;
+               const icon = this.querySelector('svg');
+               
+               // Close all other accordions
+               accordionButtons.forEach(otherButton => {
+                   if (otherButton !== this) {
+                       otherButton.nextElementSibling.classList.remove('active');
+                       otherButton.querySelector('svg').style.transform = 'rotate(0deg)';
+                   }
+               });
+               
+               // Toggle current accordion
+               content.classList.toggle('active');
+               icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+           });
+       });
+   </script>
+</body>
+</html>
